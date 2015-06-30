@@ -1,0 +1,7 @@
+fixtures:
+  repositories:
+    'designate': 'git://github.com/stankevich/puppet-designate'
+    'python': 'git://github.com/stankevich/puppet-python'
+    'vcsrepo': 'git://github.com/puppetlabs/puppetlabs-vcsrepo'
+  symlinks:
+    'designate_ext': "#{source_dir}"

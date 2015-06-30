@@ -1,0 +1,11 @@
+description "Designate Central server"
+author "Clayton O'Neill <clayton.oneill@twcable.com>"
+
+start on runlevel [2345]
+stop on runlevel [!2345]
+
+respawn
+
+exec start-stop-daemon --start --chuid designate \
+            --chdir /var/lib/designate --name designate-central \
+            --exec /usr/bin/designate-central
