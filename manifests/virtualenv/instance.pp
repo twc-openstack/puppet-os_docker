@@ -48,7 +48,7 @@
 # virtualenvs installed at the same time.
 #
 # [*venv_requirements*] (required) Python requirements.txt to pass to pip when
-# populating the virtualenv.
+# populating the virtualenv.  Required if the instance is ensured to be present.
 #
 # [*venv_extra_args*] (optional) Extra arguments that will be passed to `pip
 # install` when creating the virtualenv.
@@ -63,8 +63,8 @@ define designate_ext::virtualenv::instance(
   $bindir,
   $binaries,
   $venv_prefix,
-  $venv_requirements,
   $ensure            = 'present',
+  $venv_requirements = undef,
   $venv_active       = false,
   $venv_extra_args   = undef,
   $config_files      = {},
@@ -82,6 +82,8 @@ define designate_ext::virtualenv::instance(
   $venv_name = "${venv_prefix}-${name}"
 
   if $ensure == 'present' {
+    validate_string($venv_requirements)
+
     file { $req_dest:
       ensure => 'file',
       owner  => 'root',
