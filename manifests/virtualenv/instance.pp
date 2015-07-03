@@ -130,7 +130,7 @@ define designate_ext::virtualenv::instance(
     -> Designate_ext::Config_File<||>
     -> Anchor['designate::config::begin']
 
-    designate_ext::binary_link { $binaries:
+    designate_ext::virtualenv::binary_link { $binaries:
       source_dir => "${venv_dir}/bin",
       dest_dir   => $bindir,
       notify     => Anchor['designate::service::begin'],

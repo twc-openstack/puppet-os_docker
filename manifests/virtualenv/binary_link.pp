@@ -1,4 +1,4 @@
-# == Define:: designate::binary_link
+# == Define:: designate::virtualenv::binary_link
 #
 # This will link the given file from the source directory into the binary
 # directory.  This is used to link binaries from a virtualenv into a binary
@@ -16,7 +16,7 @@
 #  (required) Directory to link to.  This should be a directory in the user's
 #  path, usually /usr/bin.
 #
-define designate_ext::binary_link(
+define designate_ext::virtualenv::binary_link(
   $file       = $name,
   $source_dir = undef,
   $dest_dir   = undef,
