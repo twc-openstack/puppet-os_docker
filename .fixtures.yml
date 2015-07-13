@@ -1,6 +1,7 @@
 fixtures:
   repositories:
     'designate': 'git://github.com/stankevich/puppet-designate'
+    'docker': 'git@github.com:garethr/garethr-docker.git'
     'python': 'git://github.com/stankevich/puppet-python'
     'vcsrepo': 'git://github.com/puppetlabs/puppetlabs-vcsrepo'
   symlinks:
