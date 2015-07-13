@@ -1,6 +1,6 @@
 # == Class: designate_ext::virtualenv
 #
-# This module explicitly supports provisioning multiple virtualenv based
+# This class explicitly supports provisioning multiple virtualenv based
 # installations in order to make upgrades and rollbacks easier.  To take
 # advantage of this, you can define additional instances of
 # designate_ext::virtualenv::instance type with the active flag set to false
@@ -29,7 +29,7 @@
 # designate_ext::config_file defined type.  Filenames should be relative to
 # /etc/designate.  For virtualenv installs example config files can be copied
 # from the module, or provided by the user.  Default:
-# $::dessignate_ext::params::config_files
+# $::designate_ext::params::config_files
 #
 class designate_ext::virtualenv(
   $virtualenvs      = {},
