@@ -1,4 +1,4 @@
-# == Class: designate_ext::docker::api
+# == Class: os_docker::designate::api
 #
 # This class handles any docker related changes needed for this service.
 # Currently this includes creating the docker container and the startup script
@@ -14,19 +14,19 @@
 #
 # [*active_image_name*] (optional) The name of the docker image to use for the
 # service container.  Defaults to the active container set via the main
-# designate_ext::docker class.
+# os_docker::designate class.
 #
 # [*active_image_tag*] (optional) The tag of the docker image to use for the
 # service container.  Defaults to the active container set via the main
-# designate_ext::docker class.
+# os_docker::designate class.
 #
-class designate_ext::docker::api(
+class os_docker::designate::api(
   $manage_service    = true,
   $run_override      = {},
-  $active_image_name = $::designate_ext::docker::active_image_name,
-  $active_image_tag  = $::designate_ext::docker::active_image_tag,
+  $active_image_name = $::os_docker::designate::active_image_name,
+  $active_image_tag  = $::os_docker::designate::active_image_tag,
 ){
-  include ::designate_ext::docker
+  include ::os_docker::designate
 
   if $active_image_name {
     if $manage_service {

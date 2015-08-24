@@ -1,4 +1,4 @@
-# == Class: designate_ext::docker::sink
+# == Class: os_docker::designate::central
 #
 # This class handles any docker related changes needed for this service.
 # Currently this includes creating the docker container and the startup script
@@ -20,19 +20,19 @@
 # service container.  Defaults to the active container set via the main
 # designate_ext::docker class.
 #
-class designate_ext::docker::sink(
+class os_docker::designate::central(
   $manage_service    = true,
   $run_override      = {},
-  $active_image_name = $::designate_ext::docker::active_image_name,
-  $active_image_tag  = $::designate_ext::docker::active_image_tag,
+  $active_image_name = $::os_docker::designate::active_image_name,
+  $active_image_tag  = $::os_docker::designate::active_image_tag,
 ){
-  include ::designate_ext::docker
+  include ::os_docker::designate
 
   if $active_image_name {
     if $manage_service {
       $default_params = {
         image   => "${active_image_name}:${active_image_tag}",
-        command => '/usr/bin/designate-sink',
+        command => '/usr/bin/designate-central',
         net     => 'host',
         volumes => [
           '/etc/designate:/etc/designate:ro',
@@ -44,12 +44,12 @@ class designate_ext::docker::sink(
         extra_parameters => ['--restart=always'],
       }
 
-      $sink_resource = merge($default_params, $run_override)
-      create_resources('::docker::run', { 'designate-sink' => $sink_resource } )
+      $central_resource = merge($default_params, $run_override)
+      create_resources('::docker::run', { 'designate-central' => $central_resource } )
     }
 
-    docker::command { '/usr/bin/designate-sink':
-      command => '/usr/bin/designate-sink',
+    docker::command { '/usr/bin/designate-central':
+      command => '/usr/bin/designate-central',
       image   => "${active_image_name}:${active_image_tag}",
       net     => 'host',
       volumes => [
