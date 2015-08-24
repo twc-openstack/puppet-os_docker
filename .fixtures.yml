@@ -5,4 +5,4 @@ fixtures:
     'python': 'git://github.com/stankevich/puppet-python'
     'vcsrepo': 'git://github.com/puppetlabs/puppetlabs-vcsrepo'
   symlinks:
-    'designate_ext': "#{source_dir}"
+    'os_docker': "#{source_dir}"
