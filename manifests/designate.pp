@@ -1,4 +1,4 @@
-# == Class: designate_ext::docker
+# == Class: os_docker::designate
 #
 # This class adds docker support to the Designate puppet module.  It supports
 # pulling multiple docker images and switching between them by rewriting the
@@ -23,19 +23,19 @@
 # Default: 'latest'
 #
 # [*config_files*] (optional) Hash of filenames and parameters to the
-# designate_ext::config_file defined type.  Filenames should be relative to
+# os_docker::config_file defined type.  Filenames should be relative to
 # /etc/designate.  For virtualenv installs example config files can be copied
 # from the module, or provided by the user.  Default:
-# $::designate_ext::params::config_files
+# $::os_docker::designate::params::config_files
 #
-class designate_ext::docker(
+class os_docker::designate(
   $images            = {},
   $active_image_name = undef,
   $active_image_tag  = 'latest',
-  $config_files     = $::designate_ext::params::config_files,
-) inherits ::designate_ext::params {
+  $config_files     = $::os_docker::designate::params::config_files,
+) inherits os_docker::designate::params {
 
-  include ::designate_ext::common
+  include ::os_docker::designate::common
 
   $image_defaults = { 'tag' => [ 'designate-docker' ] }
   create_resources('::docker::image', $images, $image_defaults)
@@ -63,13 +63,20 @@ class designate_ext::docker(
   ~> Anchor['designate::service::end']
 
   if $active_image_name {
-    create_resources(::designate_ext::config_file, $config_files)
+    $config_file_defaults = {
+      config_dir => '/etc/designate',
+      owner      => 'designate',
+      group      => 'designate',
+      source_dir => 'puppet:///modules/os_docker/designate/config',
+      tag        => 'designate-config-file'
+    }
+    create_resources(::os_docker::config_file, $config_files, $config_file_defaults)
   }
 
   # Creating the config directory and putting sample config files in place
   # should occur after the software is installed but before the main module
   # starts making it's changes to the config files.
   Anchor['designate::install::end']
-  -> Designate_ext::Config_File<||>
+  -> Os_docker::Config_File<| tag == 'designate-config-file' |>
   -> Anchor['designate::config::begin']
 }

@@ -1,4 +1,4 @@
-class designate_ext::params {
+class os_docker::designate::params {
   $log_dir = '/var/log/designate'
 
   # By default with packages the file contents aren't managed, so the setting
