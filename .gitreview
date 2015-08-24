@@ -1,6 +1,6 @@
 [gerrit]
 host=bfd-gerrit.os.cloud.twc.net
 port=29418
-project=puppet-designate_ext.git
+project=puppet-os_docker.git
 defaultbranch=master
 
