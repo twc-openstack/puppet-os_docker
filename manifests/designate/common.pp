@@ -1,4 +1,4 @@
-class designate_ext::common {
+class os_docker::designate::common {
   include ::designate::params
 
   $managed_dirs = [
