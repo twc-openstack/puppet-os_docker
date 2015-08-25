@@ -16,6 +16,11 @@ support to the Designate module:
 For docker support, you should include the corresponding class for each service
 you wish to configure as shown above.
 
+## Supported Projects
+
+ * Designate
+ * Heat
+
 ## Configuration
 For docker support, you will want to disable packaging installation.  You can
 do this for Designate by adding the following to your Hiera config:
