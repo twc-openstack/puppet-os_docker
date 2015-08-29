@@ -18,6 +18,9 @@
 #
 # [*active_image_overrides*] (optional) Extra parameters to pass into
 # Docker::Image when creating the active image resource.  Default: {}
+
+# [*release_name*] (required) Openstack release name (kilo, liberty) associated
+# with this image.  Used to populate default configuration files.
 #
 # [*extra_images*] (optional) Additional images associated with this service
 # that should be pulled.  This is passed directly to Docker::Image.  This may
@@ -33,6 +36,7 @@ class os_docker::designate(
   $active_image_name,
   $active_image_tag       = 'latest',
   $active_image_overrides = {},
+  $release_name,
   $extra_images           = {},
   $config_files           = $::os_docker::designate::params::config_files,
 ) inherits os_docker::designate::params {
@@ -78,19 +82,10 @@ class os_docker::designate(
   ~> Docker::Run<| tag == 'designate-docker' |>
   ~> Anchor['designate::service::end']
 
-  $config_file_defaults = {
-    config_dir => '/etc/designate',
-    owner      => 'designate',
-    group      => 'designate',
-    source_dir => 'puppet:///modules/os_docker/designate/config',
-    tag        => 'designate-config-file'
+  os_docker::config_files { 'designate':
+    release_name => $release_name,
+    config_files => $config_files,
+    image_name   => $active_image_name,
+    image_tag    => $active_image_tag,
   }
-  create_resources(::os_docker::config_file, $config_files, $config_file_defaults)
-
-  # Creating the config directory and putting sample config files in place
-  # should occur after the software is installed but before the main module
-  # starts making it's changes to the config files.
-  Anchor['designate::install::end']
-  -> Os_docker::Config_File<| tag == 'designate-config-file' |>
-  -> Anchor['designate::config::begin']
 }
