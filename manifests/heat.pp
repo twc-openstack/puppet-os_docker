@@ -83,21 +83,10 @@ class os_docker::heat(
   ~> Docker::Run<| tag == 'heat-docker' |>
   ~> Anchor['heat::service::end']
 
-  $config_file_defaults = {
-    config_dir => '/etc/heat',
-    owner      => 'heat',
-    group      => 'heat',
-    source_dir => 'puppet:///modules/os_docker/heat/config',
-    tag        => 'heat-config-file'
+  class { '::os_docker::config_files':
+    project_name => 'heat',
+    release_name => $release_name,
   }
-  create_resources(::os_docker::config_file, $config_files, $config_file_defaults)
-
-  # Creating the config directory and putting sample config files in place
-  # should occur after the software is installed but before the main module
-  # starts making it's changes to the config files.
-  Anchor['heat::install::end']
-  -> Os_docker::Config_File<| tag == 'heat-config-file' |>
-  -> Anchor['heat::config::begin']
 
   # The heat user isn't a docker user and this runs as the heat user inside the
   # container anyway.
