@@ -9,11 +9,6 @@
 #
 # === Parameters
 #
-# [*images*] Hash of docker image names and parameters that will be passed
-# directly into docker::image.  However, it's recommended that these images be
-# pulled via this class to ensure ordering of dependencies are managed
-# properly.
-#
 # [*active_image_name*] (required) Name of the image to use by default for all
 # designate services.  This can overridden on a per service basis.  This image
 # will be used for the designate-manage script.
