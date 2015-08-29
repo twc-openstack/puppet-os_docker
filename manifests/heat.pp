@@ -9,11 +9,6 @@
 #
 # === Parameters
 #
-# [*images*] Hash of docker image names and parameters that will be passed
-# directly into docker::image.  However, it's recommended that these images be
-# pulled via this class to ensure ordering of dependencies are managed
-# properly.
-#
 # [*active_image_name*] (required) Name of the image to use by default for all
 # heat services.  This can overridden on a per service basis. This image will
 # be used for the heat-manage script.
@@ -35,8 +30,7 @@
 # $::os_docker::heat::params::config_files
 #
 class os_docker::heat(
-  $images            = {},
-  $active_image_name = undef,
+  $active_image_name,
   $active_image_tag  = 'latest',
   $active_image_overrides = {},
   $extra_images           = {},
