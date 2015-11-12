@@ -9,6 +9,9 @@
 # [*manage_service*] (optional) Whether or not to manage the docker container
 # for this service.  Default: true
 #
+# [*enable_uwsgitop*] (optional) If true, then create a command-wrapper that
+# will invoke uwsgitop with the heat-api uWSGI stats socket.
+#
 # [*run_override*] (optional) Hash of additional parameters to use when
 # creating the Docker::Run resource.  Default: none
 #
@@ -22,6 +25,7 @@
 #
 class os_docker::heat::api(
   $manage_service    = true,
+  $enable_uwsgitop   = true,
   $run_override      = {},
   $active_image_name = $::os_docker::heat::active_image_name,
   $active_image_tag  = $::os_docker::heat::active_image_tag,
@@ -57,6 +61,15 @@ class os_docker::heat::api(
         '/var/log/heat:/var/log/heat',
       ],
       tag     => ['heat-docker'],
+    }
+
+    if $enable_uwsgitop {
+      ::os_docker::uwsgitop { 'heat-api':
+        socket_path => '/var/log/heat/heat-api.stats',
+        log_dir     => '/var/log/heat',
+        image_name  => $active_image_name,
+        image_tag   => $active_image_tag,
+      }
     }
   }
 }
