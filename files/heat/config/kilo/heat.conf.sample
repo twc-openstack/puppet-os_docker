@@ -41,7 +41,8 @@
 # a user will be delegated to heat when creating a stack. (list value)
 #trusts_delegated_roles =
 
-# Maximum resources allowed per top-level stack. (integer value)
+# Maximum resources allowed per top-level stack. -1 stands for unlimited.
+# (integer value)
 #max_resources_per_stack = 1000
 
 # Maximum number of stacks any one tenant may have active at one time. (integer
@@ -110,14 +111,16 @@
 #onready = <None>
 
 # When this feature is enabled, scheduler hints identifying the heat stack
-# context of a server resource are passed to the configured schedulers in nova,
-# for server creates done using heat resource types OS::Nova::Server and
-# AWS::EC2::Instance. heat_root_stack_id will be set to the id of the root
-# stack of the resource, heat_stack_id will be set to the id of the resource's
-# parent stack, heat_stack_name will be set to the name of the resource's
-# parent stack, heat_path_in_stack will be set to a list of tuples,
-# (stackresourcename, stackname) with list[0] being (None, rootstackname), and
-# heat_resource_name will be set to the resource's name. (boolean value)
+# context of a server or volume resource are passed to the configured
+# schedulers in nova and cinder, for creates done using heat resource types
+# OS::Cinder::Volume, OS::Nova::Server, and AWS::EC2::Instance.
+# heat_root_stack_id will be set to the id of the root stack of the resource,
+# heat_stack_id will be set to the id of the resource's parent stack,
+# heat_stack_name will be set to the name of the resource's parent stack,
+# heat_path_in_stack will be set to a list of tuples, (stackresourcename,
+# stackname) with list[0] being (None, rootstackname), heat_resource_name will
+# be set to the resource's name, and heat_resource_uuid will be set to the
+# resource's orchestration id. (boolean value)
 #stack_scheduler_hints = false
 
 #
@@ -816,6 +819,21 @@
 
 # If set, then the server's certificate will not be verified. (boolean value)
 #insecure = false
+
+
+[eventlet_opts]
+
+#
+# From heat.common.wsgi
+#
+
+# If False, closes the client socket connection explicitly. (boolean value)
+#wsgi_keep_alive = true
+
+# Timeout for client connections' socket operations. If an incoming connection
+# is idle for this number of seconds it will be closed. A value of '0' means
+# wait forever. (integer value)
+#client_socket_timeout = 900
 
 
 [heat_api]
