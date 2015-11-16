@@ -10,8 +10,10 @@ apt-get install --no-install-recommends -y \
   libmysqlclient-dev \
   libpq-dev \
   libsasl2-dev \
+  libvirt-dev \
   libxml2-dev \
   libxslt-dev \
+  pkg-config \
   python-dev \
   python-virtualenv \
   rsync

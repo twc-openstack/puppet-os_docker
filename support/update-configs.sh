@@ -1,13 +1,14 @@
 #!/bin/bash -xve
 
 BASEDIR=$(cd "$(dirname "$0")"; pwd)
-PROJECTS="designate heat keystone glance"
+PROJECTS="designate glance heat keystone nova"
 RELEASES="juno kilo liberty"
 declare -A BRANCHES
 BRANCHES=(
   ["juno"]="stable/juno"
   ["kilo"]="stable/kilo"
-  ["liberty"]="master"
+  ["liberty"]="stable/liberty"
+  ["mitaka"]="master"
 )
 
 . $BASEDIR/tox-venv/bin/activate
