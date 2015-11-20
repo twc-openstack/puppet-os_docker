@@ -33,6 +33,14 @@ for PROJECT in $PROJECTS; do
     else
       CONFDIR=etc/
     fi
+
+    # Some of the sample nova config files are _sample.conf instead of
+    # .conf.sample which throws off the assumptions. in the config file
+    # classes.
+    for i in $(find $CONFDIR -name '*_sample.conf'); do
+      mv $i $(dirname $i)/$(basename $i _sample.conf).conf.sample
+    done
+
     rsync -avP --delete --exclude 'README*.txt' --delete-excluded \
       $CONFDIR $BASEDIR/configs/$PROJECT/config/$RELEASE/
   done
