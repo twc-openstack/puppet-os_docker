@@ -1,6 +1,6 @@
-# == Class: os_docker::heat
+# == Class: os_docker::nova
 #
-# This class adds docker support to the Heat puppet module.  It supports
+# This class adds docker support to the nova puppet module.  It supports
 # pulling multiple docker images and switching between them by rewriting the
 # init scripts and shell wrappers and then restarting the services.  It's
 # expected that the images in use will be configured via hiera and that
@@ -10,8 +10,8 @@
 # === Parameters
 #
 # [*active_image_name*] (required) Name of the image to use by default for all
-# heat services.  This can overridden on a per service basis. This image will
-# be used for the heat-manage script.
+# nova services.  This can overridden on a per service basis. This image will
+# be used for the nova-manage script.
 #
 # [*active_image_tag*] (optional) Tag of the active_image_name to use.
 # Default: 'latest'
@@ -28,72 +28,72 @@
 #
 # [*config_files*] (optional) Hash of filenames and parameters to the
 # os_docker::config_file defined type.  Filenames should be relative to
-# /etc/heat.  For virtualenv installs example config files can be copied from
+# /etc/nova.  For virtualenv installs example config files can be copied from
 # the module, or provided by the user.  Default:
-# $::os_docker::heat::params::config_files
+# $::os_docker::nova::params::config_files
 #
-class os_docker::heat(
+class os_docker::nova(
   $active_image_name,
   $active_image_tag  = 'latest',
   $active_image_overrides = {},
   $release_name,
   $extra_images           = {},
-  $config_files     = $::os_docker::heat::params::config_files,
-) inherits os_docker::heat::params {
+  $config_files     = $::os_docker::nova::params::config_files,
+) inherits os_docker::nova::params {
 
-  file { $::os_docker::heat::params::managed_dirs:
+  file { $::os_docker::nova::params::managed_dirs:
     ensure => directory,
-    owner  => 'heat',
-    group  => 'heat',
+    owner  => 'nova',
+    group  => 'nova',
     mode   => '0750',
-    before => Anchor['heat::install::begin'],
+    before => Anchor['nova::install::begin'],
   }
   $active_image = { "${active_image_name}:${active_image_tag}" => {
     image     => $active_image_name,
     image_tag => $active_image_tag,
   } }
 
-  $image_defaults = { 'tag' => [ 'heat-docker' ] }
+  $image_defaults = { 'tag' => [ 'nova-docker' ] }
   $active_image_defaults = merge($image_defaults, $active_image_overrides)
   create_resources('::docker::image', $active_image, $active_image_defaults)
   create_resources('::docker::image', $extra_images, $image_defaults)
 
-  docker::command { '/usr/bin/heat-manage':
-    command => '/usr/bin/heat-manage',
+  docker::command { '/usr/bin/nova-manage':
+    command => '/usr/bin/nova-manage',
     image   => "${active_image_name}:${active_image_tag}",
     net     => 'host',
     volumes => [
-      '/etc/heat:/etc/heat:ro',
-      '/var/log/heat:/var/log/heat',
+      '/etc/nova:/etc/nova:ro',
+      '/var/log/nova:/var/log/nova',
     ],
-    tag     => ['heat-docker'],
+    tag     => ['nova-docker'],
   }
 
   # We want to make sure any packages are ensured absent before putting
   # replacements in place
-  Anchor['heat::install::begin']
-  -> Package<| tag == 'heat-package' |>
-  -> Docker::Image<| tag == 'heat-docker' |>
-  -> Docker::Command<| tag == 'heat-docker' |>
-  ~> Anchor['heat::install::end']
+  Anchor['nova::install::begin']
+  -> Package<| tag == 'nova-package' |>
+  -> Docker::Image<| tag == 'nova-docker' |>
+  -> Docker::Command<| tag == 'nova-docker' |>
+  ~> Anchor['nova::install::end']
 
-  Anchor['heat::service::begin']
-  ~> Docker::Run<| tag == 'heat-docker' |>
-  ~> Anchor['heat::service::end']
+  Anchor['nova::service::begin']
+  ~> Docker::Run<| tag == 'nova-docker' |>
+  ~> Anchor['nova::service::end']
 
-  Docker::Run<| tag == 'heat-docker' |>
-  -> Service<| tag == 'heat-service' |>
+  Docker::Run<| tag == 'nova-docker' |>
+  -> Service<| tag == 'nova-service' |>
 
-  os_docker::config_files { 'heat':
+  os_docker::config_files { 'nova':
     release_name => $release_name,
     config_files => $config_files,
     image_name   => $active_image_name,
     image_tag    => $active_image_tag,
   }
 
-  # The heat user isn't a docker user and this runs as the heat user inside the
+  # The nova user isn't a docker user and this runs as the nova user inside the
   # container anyway.
-  Exec<| title == 'heat-dbsync' |> {
+  Exec<| title == 'nova-dbsync' |> {
     user => 'root',
   }
 }
