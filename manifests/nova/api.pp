@@ -24,27 +24,37 @@
 # os_docker::nova class.
 #
 class os_docker::nova::api(
-  $manage_service    = true,
-  $enable_uwsgitop   = true,
-  $run_override      = {},
-  $active_image_name = $::os_docker::nova::active_image_name,
-  $active_image_tag  = $::os_docker::nova::active_image_tag,
+  $manage_service       = true,
+  $enable_uwsgitop      = true,
+  $run_override         = {},
+  $active_image_name    = $::os_docker::nova::active_image_name,
+  $active_image_tag     = $::os_docker::nova::active_image_tag,
+  $enable_monasca       = true,
+  $monasca_event_socket = '/tmp/eventsocket',
 ){
   include ::os_docker::nova
 
   if $active_image_name {
+    $vols_default = [
+      '/etc/nova:/etc/nova:ro',
+      '/var/log/nova:/var/log/nova',
+      '/var/lock/nova:/var/lock/nova',
+      '/var/lib/nova:/var/lib/nova',
+    ]
+
+    if $enable_monasca {
+      $vols = concat($vols_default, "${monasca_event_socket}:${monasca_event_socket}")
+    } else {
+      $vols = $vols_default
+    }
+
     if $manage_service {
       $default_params = {
         image            => "${active_image_name}:${active_image_tag}",
         command          => '/usr/bin/nova-api',
         net              => 'host',
         privileged       => true,
-        volumes          => [
-          '/etc/nova:/etc/nova:ro',
-          '/var/log/nova:/var/log/nova',
-          '/var/lock/nova:/var/lock/nova',
-          '/var/lib/nova:/var/lib/nova',
-        ],
+        volumes          => $vols,
         tag              => ['nova-docker'],
         service_prefix   => '',
         manage_service   => false,
@@ -60,12 +70,7 @@ class os_docker::nova::api(
       image      => "${active_image_name}:${active_image_tag}",
       net        => 'host',
       privileged => true,
-      volumes    => [
-        '/etc/nova:/etc/nova:ro',
-        '/var/log/nova:/var/log/nova',
-        '/var/lock/nova:/var/lock/nova',
-        '/var/lib/nova:/var/lib/nova',
-      ],
+      volumes    => $vols,
       tag        => ['nova-docker'],
     }
 
