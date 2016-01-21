@@ -45,7 +45,7 @@ class os_docker::nova(
     ensure => directory,
     owner  => 'nova',
     group  => 'nova',
-    mode   => '0750',
+    mode   => '0755',
     before => Anchor['nova::install::begin'],
   }
   $active_image = { "${active_image_name}:${active_image_tag}" => {

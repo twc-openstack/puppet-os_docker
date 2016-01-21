@@ -1,0 +1,103 @@
+# == Class: os_docker::nova::compute
+#
+# This class handles any docker related changes needed for this service.
+# Currently this includes creating the docker container and the startup script
+# to go with it.
+#
+# === Parameters
+#
+# [*manage_service*] (optional) Whether or not to manage the docker container
+# for this service.  Default: true
+#
+# [*run_override*] (optional) Hash of additional parameters to use when
+# creating the Docker::Run resource.  Default: none
+#
+# [*active_image_name*] (optional) The name of the docker image to use for the
+# service container.  Defaults to the active container set via the main
+# os_docker::nova class.
+#
+# [*active_image_tag*] (optional) The tag of the docker image to use for the
+# service container.  Defaults to the active container set via the main
+# os_docker::nova class.
+#
+class os_docker::nova::compute(
+  $manage_service    = true,
+  $run_override      = {},
+  $active_image_name = $::os_docker::nova::active_image_name,
+  $active_image_tag  = $::os_docker::nova::active_image_tag,
+  $groups            = ['libvirtd', 'ceph'],
+  $before_start      = false,
+){
+  include ::os_docker::nova
+
+  $volumes = [
+    '/etc/nova:/etc/nova:ro',
+    '/etc/ceph:/etc/ceph:ro',
+    '/lib/modules:/lib/modules:ro',
+    '/run:/run',
+    '/var/log/nova:/var/log/nova',
+    '/var/lib/nova/instances:/var/lib/nova/instances',
+    '/var/lib/libvirt:/var/lib/libvirt',
+  ]
+
+  $environment = [
+    'OS_DOCKER_GROUP_DIR=/etc/nova/groups',
+  ]
+
+  if $active_image_name {
+    if $manage_service {
+      $default_params = {
+        image            => "${active_image_name}:${active_image_tag}",
+        command          => '/usr/bin/nova-compute',
+        net              => 'host',
+        env              => $environment,
+        privileged       => true,
+        service_prefix   => '',
+        manage_service   => false,
+        extra_parameters => ['--restart=always'],
+        volumes          => $volumes,
+        tag              => ['nova-docker'],
+        before_start     => $before_start,
+      }
+
+      $compute_resource = merge($default_params, $run_override)
+      create_resources('::docker::run', { 'nova-compute' => $compute_resource } )
+    }
+
+    # This directory exists to hold files the nova user needs to be able to
+    # read.  The container is expected to ensure the nova user inside the
+    # container is a member of the groups that own the files in the directory.
+    file { '/etc/nova/groups':
+      ensure  => 'directory',
+      owner   => 'nova',
+      group   => 'nova',
+      mode    => '0755',
+      purge   => true,
+      recurse => true,
+      force   => true,
+    }
+
+    $groups.each |$group| {
+      file { "/etc/nova/groups/$group":
+        ensure  => 'file',
+        owner   => 'nova',
+        group   => $group,
+        content => '',
+        require => [
+          Package['ceph'],
+          Package['libvirt-bin'],
+        ],
+      }
+    }
+
+    docker::command { '/usr/bin/nova-compute':
+      command    => '/usr/bin/nova-compute',
+      image      => "${active_image_name}:${active_image_tag}",
+      net        => 'host',
+      env        => $environment,
+      privileged => true,
+      volumes    => $volumes,
+      tag        => ['nova-docker'],
+    }
+  }
+}
