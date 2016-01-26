@@ -33,6 +33,7 @@ class os_docker::nova::compute(
   $volumes = [
     '/etc/nova:/etc/nova:ro',
     '/etc/ceph:/etc/ceph:ro',
+    '/etc/ssh/ssh_known_hosts:/etc/ssh/ssh_known_hosts:ro',
     '/lib/modules:/lib/modules:ro',
     '/run:/run',
     '/var/log/nova:/var/log/nova',
@@ -42,6 +43,7 @@ class os_docker::nova::compute(
 
   $environment = [
     'OS_DOCKER_GROUP_DIR=/etc/nova/groups',
+    'OS_DOCKER_HOME_DIR=/var/lib/nova',
   ]
 
   if $active_image_name {
