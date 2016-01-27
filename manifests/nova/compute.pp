@@ -37,7 +37,7 @@ class os_docker::nova::compute(
     '/lib/modules:/lib/modules:ro',
     '/run:/run',
     '/var/log/nova:/var/log/nova',
-    '/var/lib/nova/instances:/var/lib/nova/instances',
+    '/var/lib/nova:/var/lib/nova',
     '/var/lib/libvirt:/var/lib/libvirt',
   ]
 
