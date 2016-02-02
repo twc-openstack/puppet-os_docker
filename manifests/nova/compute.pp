@@ -33,6 +33,7 @@ class os_docker::nova::compute(
   $volumes = [
     '/etc/nova:/etc/nova:ro',
     '/etc/ceph:/etc/ceph:ro',
+    '/etc/iscsi:/etc/iscsi:ro',
     '/etc/ssh/ssh_known_hosts:/etc/ssh/ssh_known_hosts:ro',
     '/lib/modules:/lib/modules:ro',
     '/run:/run',
