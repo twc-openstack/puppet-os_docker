@@ -33,9 +33,9 @@ class os_docker::nova::compute(
   $volumes = [
     '/etc/nova:/etc/nova:ro',
     '/etc/ceph:/etc/ceph:ro',
-    # /etc/iscsi and /dev/disk/by-path are needed for iscsi cinder volumes
+    # /etc/iscsi and /dev are needed for iscsi cinder volumes
     '/etc/iscsi:/etc/iscsi',
-    '/dev/disk/by-path:/dev/disk/by-path:ro',
+    '/dev:/dev',
     '/etc/ssh/ssh_known_hosts:/etc/ssh/ssh_known_hosts:ro',
     '/lib/modules:/lib/modules:ro',
     '/run:/run',
