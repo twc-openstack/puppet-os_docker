@@ -20,12 +20,24 @@
 # service container.  Defaults to the active container set via the main
 # os_docker::nova class.
 #
+# [*groups*] (optional) Groups that the nova user inside the container should
+# be a member of.
+#
+# [*extra_volumes*] (optional) Extra docker volumes to mount inside the
+# container.  This will be passed directly to docker in addition tho the normal
+# volumes
+#
+# [*before_start*] (optional) Shell script part that will be run before the
+# service is started.  This can be used to ensure neutron-ovs-cleanup has
+# already run before nova-compute is started.
+#
 class os_docker::nova::compute(
   $manage_service    = true,
   $run_override      = {},
   $active_image_name = $::os_docker::nova::active_image_name,
   $active_image_tag  = $::os_docker::nova::active_image_tag,
   $groups            = ['libvirtd', 'ceph'],
+  $extra_volumes     = [],
   $before_start      = false,
 ){
   include ::os_docker::nova
@@ -60,7 +72,7 @@ class os_docker::nova::compute(
         service_prefix   => '',
         manage_service   => false,
         extra_parameters => ['--restart=always'],
-        volumes          => $volumes,
+        volumes          => concat($volumes, $extra_volumes),
         tag              => ['nova-docker'],
         before_start     => $before_start,
       }
@@ -101,7 +113,7 @@ class os_docker::nova::compute(
       net        => 'host',
       env        => $environment,
       privileged => true,
-      volumes    => $volumes,
+      volumes    => concat($volumes, $extra_volumes),
       tag        => ['nova-docker'],
     }
   }
