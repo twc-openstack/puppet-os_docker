@@ -13,7 +13,7 @@ class os_docker::keystone::params {
   $config_files  = {
     '/etc/keystone/default_catalog.templates'  => { replace => true },
     '/etc/keystone/keystone.conf'              => { replace => false },
-    '/etc/keystone/keystone-paste.ini'         => { replace => true },
+    '/etc/keystone/keystone-paste.ini'         => { replace => false },
     '/etc/keystone/logging.conf'               => { replace => true },
     '/etc/keystone/policy.json'                => { replace => true },
     '/etc/keystone/policy.v3cloudsample.json'  => { replace => true },
