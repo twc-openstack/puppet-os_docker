@@ -52,7 +52,7 @@ class os_docker::keystone::all(
       }
 
       $all_resource = merge($default_params, $run_override)
-      create_resources('::docker::run', { 'keystone-all' => $all_resource } )
+      create_resources('::docker::run', { 'keystone' => $all_resource } )
     }
 
     docker::command { '/usr/bin/keystone-all':
