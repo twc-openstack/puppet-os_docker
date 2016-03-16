@@ -91,7 +91,7 @@ class os_docker::keystone(
 
   # The keystone user isn't a docker user and this runs as the keystone user inside the
   # container anyway.
-  Exec<| title == 'keystone-dbsync' |> {
+  Exec<| tag == 'keystone-exec' |> {
     user => 'root',
   }
 }
