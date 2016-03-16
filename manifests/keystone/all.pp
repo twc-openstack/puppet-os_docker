@@ -70,8 +70,14 @@ class os_docker::keystone::all(
     }
 
     if $enable_uwsgitop {
-      ::os_docker::uwsgitop { 'keystone-all':
-        socket_path => '/var/log/keystone/keystone-all.stats',
+      ::os_docker::uwsgitop { 'keystone-main':
+        socket_path => '/var/log/keystone/keystone-main.stats',
+        log_dir     => '/var/log/keystone',
+        image_name  => $active_image_name,
+        image_tag   => $active_image_tag,
+      }
+      ::os_docker::uwsgitop { 'keystone-admin':
+        socket_path => '/var/log/keystone/keystone-admin.stats',
         log_dir     => '/var/log/keystone',
         image_name  => $active_image_name,
         image_tag   => $active_image_tag,
