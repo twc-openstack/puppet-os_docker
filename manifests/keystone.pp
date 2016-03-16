@@ -82,6 +82,9 @@ class os_docker::keystone(
   ~> Docker::Run<| tag == 'keystone-docker' |>
   ~> Anchor['keystone::service::end']
 
+  Docker::Run<| tag == 'keystone-docker' |>
+  -> Service<| tag == 'keystone-service' |>
+
   os_docker::config_files { 'keystone':
     release_name => $release_name,
     config_files => $config_files,

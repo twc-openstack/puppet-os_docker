@@ -55,7 +55,7 @@ class os_docker::keystone::all(
       create_resources('::docker::run', { 'keystone-all' => $all_resource } )
     }
 
-    docker::command { '/usr/bin/keystone-all':
+    docker::command { '/usr/bin/keystone':
       command => '/usr/bin/keystone-api',
       image   => "${active_image_name}:${active_image_tag}",
       net     => 'host',
