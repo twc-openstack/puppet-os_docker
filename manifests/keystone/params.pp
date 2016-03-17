@@ -3,6 +3,7 @@ class os_docker::keystone::params {
 
   $managed_dirs = [
     '/var/log/keystone',
+    '/etc/keystone',
   ]
 
   # By default with packages the file contents aren't managed, so the setting

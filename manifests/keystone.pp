@@ -42,11 +42,11 @@ class os_docker::keystone(
 ) inherits os_docker::keystone::params {
 
   file { $::os_docker::keystone::params::managed_dirs:
-    ensure => directory,
-    owner  => 'keystone',
-    group  => 'keystone',
-    mode   => '0750',
-    before => Anchor['keystone::install::begin'],
+    ensure  => directory,
+    owner   => 'keystone',
+    group   => 'keystone',
+    mode    => '0750',
+    before  => Anchor['keystone::install::begin'],
   }
   $active_image = { "${active_image_name}:${active_image_tag}" => {
     image     => $active_image_name,

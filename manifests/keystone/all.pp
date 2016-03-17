@@ -44,6 +44,9 @@ class os_docker::keystone::all(
           # fernet directory even though it will never write to it.
           '/etc/keystone/fernet-keys:/etc/keystone/fernet-keys',
           '/var/log/keystone:/var/log/keystone',
+          # Keystone needs /etc/ldap and the certs mounted in order to use LDAP
+          '/etc/ldap:/etc/ldap:ro',
+          '/etc/ssl/certs:/etc/ssl/certs:ro',
         ],
         tag => ['keystone-docker'],
         service_prefix => '',
