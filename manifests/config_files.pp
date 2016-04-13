@@ -73,4 +73,9 @@ define os_docker::config_files(
   Anchor["${project_name}::install::end"]
   -> Os_docker::Config_File<| tag == "${project_name}-config-file" |>
   -> Anchor["${project_name}::config::begin"]
+
+  # If the config files are changed, the service should get restarted
+  Os_docker::Config_File<| tag == "${project_name}-config-file" |>
+  ~> Anchor["${project_name}::service::begin"]
+
 }
