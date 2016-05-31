@@ -1,8 +1,8 @@
 #!/bin/bash -xve
 
 BASEDIR=$(cd "$(dirname "$0")"; pwd)
-PROJECTS="designate glance heat keystone nova neutron"
-RELEASES="juno kilo liberty mitaka"
+PROJECTS="neutron"
+RELEASES="liberty mitaka"
 declare -A BRANCHES
 BRANCHES=(
   ["juno"]="stable/juno"
