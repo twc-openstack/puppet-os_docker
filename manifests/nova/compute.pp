@@ -52,6 +52,7 @@ class os_docker::nova::compute(
     '/lib/modules:/lib/modules:ro',
     '/run/libvirt:/run/libvirt',
     '/run/openvswitch:/run/openvswitch',
+    '/run/lock:/run/lock',
     '/var/log/nova:/var/log/nova',
     '/var/lib/nova:/var/lib/nova',
     '/var/lib/libvirt:/var/lib/libvirt',
