@@ -46,6 +46,7 @@ class os_docker::keystone::all(
           '/var/log/keystone:/var/log/keystone',
           # Keystone needs the certs mounted in order to use LDAPS
           '/etc/ssl/certs:/etc/ssl/certs:ro',
+          '/etc/monasca:/etc/monasca',
         ],
         tag => ['keystone-docker'],
         service_prefix => '',
@@ -67,6 +68,7 @@ class os_docker::keystone::all(
         # fernet directory even though it will never write to it.
         '/etc/keystone/fernet-keys:/etc/keystone/fernet-keys',
         '/var/log/keystone:/var/log/keystone',
+        '/etc/monasca:/etc/monasca',
       ],
       tag     => ['keystone-docker'],
     }

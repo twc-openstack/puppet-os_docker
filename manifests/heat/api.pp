@@ -41,6 +41,7 @@ class os_docker::heat::api(
         volumes => [
           '/etc/heat:/etc/heat:ro',
           '/var/log/heat:/var/log/heat',
+          '/etc/monasca:/etc/monasca',
         ],
         tag => ['heat-docker'],
         service_prefix => '',
@@ -59,6 +60,7 @@ class os_docker::heat::api(
       volumes => [
         '/etc/heat:/etc/heat:ro',
         '/var/log/heat:/var/log/heat',
+        '/etc/monasca:/etc/monasca',
       ],
       tag     => ['heat-docker'],
     }
