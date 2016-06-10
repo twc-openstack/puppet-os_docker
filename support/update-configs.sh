@@ -42,6 +42,7 @@ for PROJECT in $PROJECTS; do
       mv $i $(dirname $i)/$(basename $i _sample.conf).conf.sample
     done
 
+    rm -rf $CONFDIR/oslo-config-generator
     rsync -avP --delete --exclude 'README*.txt' --delete-excluded \
       $CONFDIR $BASEDIR/configs/$PROJECT/config/$RELEASE/
   done
