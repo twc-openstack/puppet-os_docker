@@ -37,7 +37,7 @@ class os_docker::designate::api(
         volumes => [
           '/etc/designate:/etc/designate:ro',
           '/var/log/designate:/var/log/designate',
-          '/etc/monasca:/etc/monasca',
+          '/var/run/monasca:/var/run/monasca',
         ],
         tag => ['designate-docker'],
         service_prefix => '',
@@ -56,7 +56,7 @@ class os_docker::designate::api(
       volumes => [
         '/etc/designate:/etc/designate:ro',
         '/var/log/designate:/var/log/designate',
-        '/etc/monasca:/etc/monasca',
+        '/var/run/monasca:/var/run/monasca',
       ],
       tag     => ['designate-docker'],
     }

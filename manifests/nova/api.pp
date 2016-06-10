@@ -40,7 +40,7 @@ class os_docker::nova::api(
       '/var/log/nova:/var/log/nova',
       '/var/lock/nova:/var/lock/nova',
       '/var/lib/nova:/var/lib/nova',
-      '/etc/monasca:/etc/monasca',
+      '/var/run/monasca:/var/run/monasca',
     ]
 
     if $enable_monasca {
