@@ -1,0 +1,10 @@
+Verified+1: Jenkins User <jenkins@twcable.com>
+Code-Review+1: Ryan Bak <ryan.bak@twcable.com>
+Workflow+1: Ryan Bak <ryan.bak@twcable.com>
+Code-Review+1: Brad Klein <bradley.klein@twcable.com>
+Code-Review+2: Clayton O'Neill <clayton.oneill@charter.com>
+Submitted-by: Jenkins User <jenkins@twcable.com>
+Submitted-at: Fri, 10 Jun 2016 12:58:33 +0000
+Reviewed-on: https://bfd-gerrit.os.cloud.twc.net/11015
+Project: puppet-os_docker
+Branch: refs/heads/master
