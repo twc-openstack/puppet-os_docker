@@ -28,8 +28,7 @@
 # volumes
 #
 # [*before_start*] (optional) Shell script part that will be run before the
-# service is started.  This can be used to ensure neutron-ovs-cleanup has
-# already run before nova-compute is started.
+# service is started.
 #
 class os_docker::nova::compute(
   $manage_service    = true,
