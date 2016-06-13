@@ -24,12 +24,17 @@
 # container.  This will be passed directly to docker in addition tho the normal
 # volumes
 #
+# [*before_start*] (optional) Shell script part that will be run before the
+# service is started.  This can be used to ensure neutron-ovs-cleanup has
+# already run before the service is started.
+#
 class os_docker::glance::registry(
   $manage_service    = true,
   $run_override      = {},
   $active_image_name = $::os_docker::glance::active_image_name,
   $active_image_tag  = $::os_docker::glance::active_image_tag,
   $extra_volumes     = [],
+  $before_start      = false,
 ){
   include ::os_docker::glance
   include ::os_docker::glance::params
@@ -47,6 +52,7 @@ class os_docker::glance::registry(
         extra_parameters => ['--restart=always'],
         volumes          => concat($::os_docker::glance::params::volumes, $extra_volumes),
         tag              => ['glance-docker'],
+        before_start     => $before_start,
       }
 
       $registry_resource = merge($default_params, $run_override)
