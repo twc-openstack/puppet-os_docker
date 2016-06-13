@@ -3,6 +3,7 @@ class os_docker::glance::params {
 
   $managed_dirs = [
     '/etc/glance',
+    '/etc/glance/metadefs',
     '/var/lib/glance',
     '/var/lock/glance',
     '/var/log/glance',
