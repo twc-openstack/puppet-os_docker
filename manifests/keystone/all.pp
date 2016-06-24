@@ -31,6 +31,7 @@ class os_docker::keystone::all(
   $active_image_tag  = $::os_docker::keystone::active_image_tag,
 ){
   include ::os_docker::keystone
+  include ::os_docker::keystone::params
 
   if $active_image_name {
     if $manage_service {
@@ -38,16 +39,7 @@ class os_docker::keystone::all(
         image   => "${active_image_name}:${active_image_tag}",
         command => '/usr/bin/keystone',
         net     => 'host',
-        volumes => [
-          '/etc/keystone:/etc/keystone:ro',
-          # Keystone has a bug that requires it to have write access to the
-          # fernet directory even though it will never write to it.
-          '/etc/keystone/fernet-keys:/etc/keystone/fernet-keys',
-          '/var/log/keystone:/var/log/keystone',
-          # Keystone needs the certs mounted in order to use LDAPS
-          '/etc/ssl/certs:/etc/ssl/certs:ro',
-          '/var/run/monasca:/var/run/monasca',
-        ],
+        volumes => $::os_docker::keystone::params::volumes,
         tag => ['keystone-docker'],
         service_prefix => '',
         manage_service => false,
@@ -62,14 +54,7 @@ class os_docker::keystone::all(
       command => '/usr/bin/keystone-api',
       image   => "${active_image_name}:${active_image_tag}",
       net     => 'host',
-      volumes => [
-        '/etc/keystone:/etc/keystone:ro',
-        # Keystone has a bug that requires it to have write access to the
-        # fernet directory even though it will never write to it.
-        '/etc/keystone/fernet-keys:/etc/keystone/fernet-keys',
-        '/var/log/keystone:/var/log/keystone',
-        '/var/run/monasca:/var/run/monasca',
-      ],
+      volumes => $::os_docker::keystone::params::volumes,
       tag     => ['keystone-docker'],
     }
 

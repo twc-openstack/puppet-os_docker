@@ -63,11 +63,7 @@ class os_docker::keystone(
     command => '/usr/bin/keystone-manage',
     image   => "${active_image_name}:${active_image_tag}",
     net     => 'host',
-    volumes => [
-      '/etc/keystone:/etc/keystone:ro',
-      '/etc/keystone/fernet-keys:/etc/keystone/fernet-keys',
-      '/var/log/keystone:/var/log/keystone',
-    ],
+    volumes => $::os_docker::keystone::params::volumes,
     tag     => ['keystone-docker'],
   }
 

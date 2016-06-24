@@ -20,4 +20,14 @@ class os_docker::keystone::params {
     '/etc/keystone/policy.v3cloudsample.json'  => { replace => true },
     '/etc/keystone/sso_callback_template.html' => { replace => true },
   }
+  $volumes = [
+    '/etc/keystone:/etc/keystone:ro',
+    # Keystone has a bug that requires it to have write access to the
+    # fernet directory even though it will never write to it.
+    '/etc/keystone/fernet-keys:/etc/keystone/fernet-keys',
+    '/var/log/keystone:/var/log/keystone',
+    # Keystone needs the certs mounted in order to use LDAPS
+    '/etc/ssl/certs:/etc/ssl/certs:ro',
+    '/var/run/monasca:/var/run/monasca',
+  ]
 }
