@@ -1,0 +1,3 @@
+rm -rf etc/init.d
+mv etc/neutron/* etc
+rm -rf etc/neutron
