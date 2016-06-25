@@ -5,8 +5,8 @@ PROJECTS="designate glance heat keystone nova neutron"
 RELEASES="juno kilo liberty mitaka"
 declare -A BRANCHES
 BRANCHES=(
-  ["juno"]="stable/juno"
-  ["kilo"]="stable/kilo"
+  ["juno"]="juno-eol"
+  ["kilo"]="kilo-eol"
   ["liberty"]="stable/liberty"
   ["mitaka"]="stable/mitaka"
   ["newton"]="master"
