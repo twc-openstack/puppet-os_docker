@@ -13,8 +13,9 @@ if [ $# -eq 1 ]; then
 fi
 
 docker run --rm \
-  -h os-docker \
+  --hostname os-docker \
   -v $BASEDIR/$COMMAND:/$COMMAND  \
+  -v $BASEDIR/exceptions/:/exceptions/ \
   -v $BASEDIR/../files/:/configs \
   os_docker-updater \
   $COMMAND
