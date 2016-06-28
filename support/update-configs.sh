@@ -3,7 +3,7 @@
 BASEDIR=$(cd "$(dirname "$0")"; pwd)
 EXCEPTIONDIR=$BASEDIR/exceptions
 
-PROJECTS="designate glance heat keystone nova neutron"
+PROJECTS="designate glance heat keystone nova neutron cinder"
 RELEASES="juno kilo liberty mitaka"
 
 declare -A BRANCHES
@@ -58,7 +58,7 @@ for PROJECT in $PROJECTS; do
       done
 
       rm -rf $CONFDIR/oslo-config-generator
-      rsync -avP --delete --exclude 'README*.txt' --delete-excluded \
+      rsync -avP --delete --exclude 'README*.txt' --exclude 'README-*.conf*' --delete-excluded \
         $CONFDIR $BASEDIR/configs/$PROJECT/config/$RELEASE/
     fi
 
