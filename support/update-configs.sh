@@ -15,6 +15,17 @@ BRANCHES=(
   ["newton"]="master"
 )
 
+# Optional arguments
+# $1 - specific project to generate configs for
+# $2 - specific release to generate project for
+if [ $# -ge 1 ]; then
+    $PROJECTS=$1
+    if [ $# -eq 2 ]; then
+        $RELEASES=$2
+    fi
+fi
+echo "generating configs for ${PROJECTS} an ${RELEASES}"
+
 . $BASEDIR/tox-venv/bin/activate
 
 mkdir -p $BASEDIR/configs
