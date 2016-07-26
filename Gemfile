@@ -16,6 +16,8 @@ group :development, :test do
   gem 'puppet-lint-variable_contains_upcase'
   gem 'puppet-lint-numericvariable'
 
+  gem 'json_pure', '< 2.0.0', :require => false
+
   gem 'beaker-rspec', :require => false
   gem 'json'
   gem 'webmock'
