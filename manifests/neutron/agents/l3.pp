@@ -49,6 +49,8 @@ class os_docker::neutron::agents::l3(
   $volumes = concat(
     $os_docker::neutron::params::volumes,
     '/run/netns:/run/netns:shared',
+    '/var/run/docker.sock:/var/run/docker.sock',
+    '/root/.docker:/root/.docker:ro',
     $extra_volumes,
   )
 
