@@ -53,5 +53,6 @@ class os_docker::neutron::params {
     '/var/lib/neutron:/var/lib/neutron',
     '/run/lock/neutron:/run/lock/neutron',
     '/run/neutron:/run/neutron',
+    '/var/run/monasca:/var/run/monasca',
   ]
 }
