@@ -49,7 +49,7 @@ class os_docker::neutron::agents::dhcp(
   $volumes = concat(
     $os_docker::neutron::params::volumes,
     '/run/netns:/run/netns:shared',
-    '/var/run/docker.sock:/var/run/docker.sock',
+    '/var/run/docker-sock/:/var/run/docker-sock',
     '/root/.docker:/root/.docker:ro',
     $extra_volumes,
   )
@@ -66,6 +66,9 @@ class os_docker::neutron::agents::dhcp(
         image            => "${active_image_name}:${active_image_tag}",
         command          => $command,
         net              => 'host',
+        env              => [
+          'DOCKER_HOST=unix:///var/run/docker-sock/docker.sock'
+        ],
         privileged       => true,
         service_prefix   => '',
         manage_service   => false,
@@ -83,7 +86,9 @@ class os_docker::neutron::agents::dhcp(
       command    => $command,
       image      => "${active_image_name}:${active_image_tag}",
       net        => 'host',
-      env        => $environment,
+      env              => [
+        'DOCKER_HOST=unix:///var/run/docker-sock/docker.sock'
+      ],
       privileged => true,
       extra_parameters => $extra_parameters,
       volumes    => $volumes,
