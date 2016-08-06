@@ -1,0 +1,30 @@
+#!/bin/bash
+
+# This wrapper will intercept the invocation of dnsmasq, then parse the
+# commandline to extract the network id.  Once it has the network id it will
+# start a dnsmasq in a new docker container in the proper namespace.
+
+IMAGE_NAME=${DNSMASQ_IMAGE_NAME:-blobmirror:5000/cirrus/openstack-dev}
+IMAGE_TAG=${DNSMASQ_IMAGE_TAG:-20160731.0-11002e.25.70d62e6}
+
+# Extract network uuid from args by extracting the first uuid in the arguments
+ARGS="$@"
+NETWORK_ID=$(echo $ARGS|perl -pe 's/.*(\w{8}-\w{4}-\w{4}-\w{4}-\w{12}).*/$1/')
+NAME=dnsmasq-${NETWORK_ID}
+
+# Stop and remove existing dnsmasq container if it exists
+docker stop $NAME || true
+docker rm -f $NAME || true
+
+# Start new container with proper permissions
+exec /usr/bin/docker run --detach \
+    -v /etc/neutron:/etc/neutron:ro \
+    -v /run/netns:/run/netns:shared \
+    -v /var/lib/neutron:/var/lib/neutron \
+    -v /var/log/neutron:/var/log/neutron \
+    --net host \
+    --pid host \
+    --privileged \
+    --name $NAME \
+    ${IMAGE_NAME}:${IMAGE_TAG} \
+    ip netns exec qdhcp-${NETWORK_ID} /usr/sbin/dnsmasq -k $ARGS
