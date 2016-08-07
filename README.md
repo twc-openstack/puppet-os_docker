@@ -19,7 +19,11 @@ you wish to configure as shown above.
 ## Supported Projects
 
  * Designate
+ * Glance
+ * Keystone
  * Heat
+ * Nova
+ * Neutron
 
 ## Configuration
 For docker support, you will want to disable packaging installation.  You can
@@ -51,3 +55,25 @@ locally and activated via Hiera.
     os_docker::designate::release_name: juno
     os_docker::designate::active_image_name: blobmaster:5000/cirrus/designate
     os_docker::designate::active_image_tag: 2014.2-13-g99db2f6.11.2027fed
+
+## Neutron Support
+
+Some Neutron agents have long lived external processes that provide services
+that shouldn't be tied to the lifetime of the agent container.  The L3 agent
+has the keepalived process for HA routers, and the DHCP agent has the dnsmasq
+process.
+
+In order to separate the lifetime of these processes out from the agents that
+spawn them, the containers the agents are started in are given access to the
+docker socket.  This allows them to intercept calls to keepalived and dnsmasq
+and then start those processes in a separate container.  The DHCP agent and L3
+agent containers share the host pid namespace, so they can use the pid files
+written by dnsmasq and keepalived to health check them.
+
+Note that L3 agent and DHCP agent containers are already privileged, so they're
+effectively running as the root user already.  It's expected that the
+additional security implications of allowing them access to the Docker Engine
+socket should be minimal.
+
+Examples of the sort of wrappers that can be used inside the container can be
+found in the `wrappers/` directory.

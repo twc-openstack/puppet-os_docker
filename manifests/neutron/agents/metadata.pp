@@ -45,7 +45,7 @@ class os_docker::neutron::agents::metadata(
   $extra_parameters  = [],
 ){
   include ::os_docker::neutron::params
-  
+
   $volumes = concat(
     $os_docker::neutron::params::volumes,
     '/run/netns:/run/netns:shared',
