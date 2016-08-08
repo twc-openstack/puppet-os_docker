@@ -60,6 +60,5 @@ class os_docker::glance::params {
     '/var/log/glance:/var/log/glance',
     '/var/lib/glance:/var/lib/glance',
     '/var/run/glance:/var/run/glance',
-    '/var/run/monasca:/var/run/monasca',
   ]
 }
