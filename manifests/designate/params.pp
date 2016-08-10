@@ -12,7 +12,7 @@ class os_docker::designate::params {
   # config files if they've changed, and leave users the option to override via
   # parameters into the os_docker::designate class.
   $config_files  = {
-    'api-paste.ini'            => { replace => true  },
+    'api-paste.ini'            => { replace => false },
     'designate.conf'           => { replace => false },
     'policy.json'              => { replace => true  },
     'rootwrap.conf'            => { replace => true  },
