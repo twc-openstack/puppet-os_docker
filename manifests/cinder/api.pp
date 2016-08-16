@@ -23,6 +23,9 @@
 # service container.  Defaults to the active container set via the main
 # os_docker::cinder class.
 #
+# [*before_start*] (optional) Shell script part that will be run before the
+# service is started.
+#
 class os_docker::cinder::api(
   $manage_service       = true,
   $enable_uwsgitop      = true,
@@ -31,6 +34,7 @@ class os_docker::cinder::api(
   $active_image_tag     = $::os_docker::cinder::active_image_tag,
   $enable_monasca       = true,
   $monasca_event_socket = '/tmp/eventsocket',
+  $before_start         = false,
 ){
   include ::os_docker::cinder
 
