@@ -1,0 +1,9 @@
+Verified+1: Jenkins User <jenkins@twcable.com>
+Code-Review+1: Craig DeLatte <craig.delatte@twcable.com>
+Workflow+1: Craig DeLatte <craig.delatte@twcable.com>
+Code-Review+2: Matt Fischer <matt.fischer@twcable.com>
+Submitted-by: Matt Fischer <matt.fischer@twcable.com>
+Submitted-at: Tue, 16 Aug 2016 19:58:10 +0000
+Reviewed-on: https://bfd-gerrit.os.cloud.twc.net/11935
+Project: puppet-os_docker
+Branch: refs/heads/master
