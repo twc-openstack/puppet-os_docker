@@ -23,7 +23,7 @@
 #
 # [*project_name*] (required) The name of the OpenStack project the config
 # files are associated with.  This is used to set the base directory
-# (/etc/<project_name>) and the owner of all of th configuration files.
+# (/etc/<project_name>) and the owner of all of the configuration files.
 #
 define os_docker::config_files(
   $release_name,
