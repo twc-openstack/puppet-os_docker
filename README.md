@@ -22,6 +22,7 @@ you wish to configure as shown above.
  * Glance
  * Keystone
  * Heat
+ * Ironic
  * Nova
  * Neutron
 
