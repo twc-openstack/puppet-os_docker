@@ -1,0 +1,8 @@
+Code-Review+2: Adam Vinsh <adam.vinsh@twcable.com>
+Workflow+1: Adam Vinsh <adam.vinsh@twcable.com>
+Verified+1: Jenkins User <jenkins@twcable.com>
+Submitted-by: Jenkins User <jenkins@twcable.com>
+Submitted-at: Tue, 23 Aug 2016 22:13:57 +0000
+Reviewed-on: https://bfd-gerrit.os.cloud.twc.net/12047
+Project: puppet-os_docker
+Branch: refs/heads/master
