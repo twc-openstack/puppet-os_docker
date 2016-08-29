@@ -20,11 +20,15 @@
 # service container.  Defaults to the active container set via the main
 # os_docker::cinder class.
 #
+# [*before_start*] (optional) Shell script part that will be run before the
+# service is started.
+#
 class os_docker::cinder::volume(
   $manage_service    = true,
   $run_override      = {},
   $active_image_name = $::os_docker::cinder::active_image_name,
   $active_image_tag  = $::os_docker::cinder::active_image_tag,
+  $before_start      = false,
 ){
   include ::os_docker::cinder
 
