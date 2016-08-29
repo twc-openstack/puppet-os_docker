@@ -65,6 +65,7 @@ class os_docker::cinder(
     volumes => [
       '/etc/cinder:/etc/cinder:ro',
       '/var/log/cinder:/var/log/cinder',
+      '/var/run/cinder:/var/run/cinder',
     ],
     tag     => ['cinder-docker'],
   }
