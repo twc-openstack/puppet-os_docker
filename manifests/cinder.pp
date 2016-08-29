@@ -65,6 +65,7 @@ class os_docker::cinder(
     volumes => [
       '/etc/cinder:/etc/cinder:ro',
       '/var/log/cinder:/var/log/cinder',
+      '/var/run/cinder:/var/run/cinder',
     ],
     tag     => ['cinder-docker'],
   }
@@ -93,7 +94,7 @@ class os_docker::cinder(
 
   # The cinder user isn't a docker user and this runs as the cinder user inside the
   # container anyway.
-  Exec<| title == 'cinder-dbsync' |> {
+  Exec<| title == 'cinder-manage db_sync' |> {
     user => 'root',
   }
 }
