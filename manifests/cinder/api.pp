@@ -38,13 +38,20 @@ class os_docker::cinder::api(
 ){
   include ::os_docker::cinder
 
+  $environment = [
+    'OS_DOCKER_GROUP_DIR=/etc/cinder/groups',
+    'OS_DOCKER_HOME_DIR=/var/lib/cinder',
+  ]
+
   if $active_image_name {
     $vols_default = [
       '/etc/cinder:/etc/cinder:ro',
       '/var/log/cinder:/var/log/cinder',
       '/var/lock/cinder:/var/lock/cinder',
       '/var/lib/cinder:/var/lib/cinder',
+      '/var/run/cinder:/var/run/cinder',
       '/var/run/monasca:/var/run/monasca',
+      '/etc/ceph:/etc/ceph:ro',
     ]
 
     if $enable_monasca {
@@ -58,6 +65,7 @@ class os_docker::cinder::api(
         image            => "${active_image_name}:${active_image_tag}",
         command          => '/usr/bin/cinder-api',
         net              => 'host',
+        env              => $environment,
         privileged       => true,
         volumes          => $vols,
         tag              => ['cinder-docker'],
