@@ -44,6 +44,7 @@ class os_docker::cinder::api(
       '/var/log/cinder:/var/log/cinder',
       '/var/lock/cinder:/var/lock/cinder',
       '/var/lib/cinder:/var/lib/cinder',
+      '/var/run/cinder:/var/run/cinder',
       '/var/run/monasca:/var/run/monasca',
     ]
 

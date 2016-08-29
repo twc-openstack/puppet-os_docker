@@ -20,11 +20,18 @@
 # service container.  Defaults to the active container set via the main
 # os_docker::cinder class.
 #
+# [*before_start*] (optional) Shell script part that will be run before the
+# service is started.
+#
+# [*before_start*] (optional) Shell script part that will be run before the
+# service is started.
+#
 class os_docker::cinder::backup(
   $manage_service    = true,
   $run_override      = {},
   $active_image_name = $::os_docker::cinder::active_image_name,
   $active_image_tag  = $::os_docker::cinder::active_image_tag,
+  $before_start      = false,
 ){
   include ::os_docker::cinder
 
@@ -34,10 +41,15 @@ class os_docker::cinder::backup(
         image   => "${active_image_name}:${active_image_tag}",
         command => '/usr/bin/cinder-backup',
         net     => 'host',
-        backups => [
+        volumes => [
           '/etc/cinder:/etc/cinder:ro',
           '/var/log/cinder:/var/log/cinder',
+          '/var/lock/cinder:/var/lock/cinder',
+          '/var/lib/cinder:/var/lib/cinder',
+          '/var/run/cinder:/var/run/cinder',
+          '/var/run/monasca:/var/run/monasca',
         ],
+
         tag => ['cinder-docker'],
         service_prefix => '',
         manage_service => false,
@@ -52,10 +64,14 @@ class os_docker::cinder::backup(
       command => '/usr/bin/cinder-backup',
       image   => "${active_image_name}:${active_image_tag}",
       net     => 'host',
-      backups => [
+      volumes => [
         '/etc/cinder:/etc/cinder:ro',
         '/var/log/cinder:/var/log/cinder',
-      ],
+        '/var/lock/cinder:/var/lock/cinder',
+        '/var/lib/cinder:/var/lib/cinder',
+        '/var/run/cinder:/var/run/cinder',
+        '/var/run/monasca:/var/run/monasca',     
+       ],
       tag     => ['cinder-docker'],
     }
   }
