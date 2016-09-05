@@ -94,5 +94,21 @@ class os_docker::neutron::agents::l3(
       volumes          => $volumes,
       tag              => ['neutron-docker'],
     }
+
+    $netns_cleanup_command = [
+      'if [ -x /usr/bin/neutron-netns-cleanup ] ; then ',
+      '/usr/bin/neutron-netns-cleanup ',
+      '--config-file=/etc/neutron/neutron.conf ',
+      '--config-file=/etc/neutron/l3_agent.ini >/dev/null 2>&1; ',
+      'fi',
+    ]
+
+    cron { 'neutron-netns-cleanup for l3 agent':
+      command => join($netns_cleanup_command, ''),
+      minute  => 0,
+      # Needs to run as root since the wrapper around the command-line will
+      # need to docker run this inside the container.
+      user    => 'root'
+    }
   }
 }
