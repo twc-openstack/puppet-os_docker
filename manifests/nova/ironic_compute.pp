@@ -43,7 +43,7 @@ class os_docker::nova::ironic_compute(
   $volumes = [
     '/etc/nova:/etc/nova:ro',
     '/lib/modules:/lib/modules:ro',
-    '/run/lock:/run/lock',
+    '/run/lock/nova:/run/lock/nova',
     '/var/log/nova:/var/log/nova',
     '/var/lib/nova:/var/lib/nova',
   ]
