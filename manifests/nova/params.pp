@@ -5,6 +5,7 @@ class os_docker::nova::params {
     '/etc/nova',
     '/etc/nova/rootwrap.d',
     '/var/lib/nova',
+    '/var/lib/nova/mnt',
     '/var/lock/nova',
     '/var/log/nova',
   ]

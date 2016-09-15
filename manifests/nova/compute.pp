@@ -31,6 +31,10 @@
 # service is started.  This can be used to ensure neutron-ovs-cleanup has
 # already run before nova-compute is started.
 #
+# [*enable_nfs*] (optional) If you are using the NFS backend for cinder you
+# will need to set this flag to true.  It will set up extra volumes in order
+# for the NFS mounts to be visible outside of the container.
+#
 class os_docker::nova::compute(
   $manage_service    = true,
   $run_override      = {},
@@ -38,7 +42,8 @@ class os_docker::nova::compute(
   $active_image_tag  = $::os_docker::nova::active_image_tag,
   $groups            = ['libvirtd', 'ceph'],
   $extra_volumes     = [],
-  $before_start      = false,
+  $before_start      = '',
+  $enable_nfs        = false,
 ){
   include ::os_docker::nova
 
@@ -63,6 +68,21 @@ class os_docker::nova::compute(
     'OS_DOCKER_HOME_DIR=/var/lib/nova',
   ]
 
+  if $enable_nfs {
+    $nfs_volumes = [ '/var/lib/nova/mnt:/var/lib/nova/mnt:shared' ]
+    $nfs_onstart = "mount --make-shared /var/lib/nova/mnt"
+
+    mount { '/var/lib/nova/mnt':
+      ensure  => 'mounted',
+      device  => '/var/lib/nova/mnt',
+      fstype  => 'none',
+      options => 'rw,bind',
+    }
+  } else {
+    $nfs_volumes = [ ]
+    $nfs_onstart = ''
+  }
+
   if $active_image_name {
     if $manage_service {
       $default_params = {
@@ -74,9 +94,9 @@ class os_docker::nova::compute(
         service_prefix   => '',
         manage_service   => false,
         extra_parameters => ['--restart=always'],
-        volumes          => concat($volumes, $extra_volumes),
+        volumes          => concat($volumes, $nfs_volumes, $extra_volumes),
         tag              => ['nova-docker'],
-        before_start     => $before_start,
+        before_start     => join([$before_start, $nfs_onstart], "\n"),
       }
 
       $compute_resource = merge($default_params, $run_override)
@@ -115,7 +135,7 @@ class os_docker::nova::compute(
       net        => 'host',
       env        => $environment,
       privileged => true,
-      volumes    => concat($volumes, $extra_volumes),
+      volumes    => concat($volumes, $nfs_volumes, $extra_volumes),
       tag        => ['nova-docker'],
     }
   }
