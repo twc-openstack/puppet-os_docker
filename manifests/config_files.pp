@@ -9,9 +9,7 @@
 #
 # [*config_files*] (required) Hash of filenames and parameters to the
 # os_docker::config_file defined type.  Filenames should be relative to
-# /etc/heat.  For virtualenv installs example config files can be copied from
-# the module, or provided by the user.  Default:
-# $::os_docker::heat::params::config_files
+# /etc/heat. Default: $::os_docker::heat::params::config_files
 #
 # [*image_name*] (required) Name of the Docker image being used for this
 # project.  This is used to populate the version file that is read by the

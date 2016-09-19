@@ -9,6 +9,9 @@
 #
 # === Parameters
 #
+# [*release_name*] (required) Openstack release name (kilo, liberty) associated
+# with this image.  Used to populate default configuration files.
+#
 # [*active_image_name*] (required) Name of the image to use by default for all
 # swift services.  This can overridden on a per service basis. This image will
 # be used for the swift-init script.
@@ -18,26 +21,21 @@
 # [*active_image_overrides*] (optional) Extra parameters to pass into
 # Docker::Image when creating the active image resource.  Default: {}
 #
-# [*release_name*] (required) Openstack release name (kilo, liberty) associated
-# with this image.  Used to populate default configuration files.
-#
 # [*extra_images*] (optional) Additional images associated with this service
 # that should be pulled.  This is passed directly to Docker::Image.  This may
 # be used to prepopulate new images.  Default: {}
 #
 # [*config_files*] (optional) Hash of filenames and parameters to the
 # os_docker::config_file defined type.  Filenames should be relative to
-# /etc/swift.  For virtualenv installs example config files can be copied from
-# the module, or provided by the user.  Default:
-# $::os_docker::nova::params::config_files
+# /etc/swift. Default: $::os_docker::nova::params::config_files
 #
 class os_docker::swift(
-  $active_image_name,
-  $active_image_tag  = 'latest',
-  $active_image_overrides = {},
   $release_name,
+  $active_image_name,
+  $active_image_tag       = 'latest',
+  $active_image_overrides = {},
   $extra_images           = {},
-  $config_files     = $::os_docker::swift::params::config_files,
+  $config_files           = $::os_docker::swift::params::config_files,
 ) {
 
   $active_image = { "${active_image_name}:${active_image_tag}" => {

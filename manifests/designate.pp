@@ -13,14 +13,14 @@
 # designate services.  This can overridden on a per service basis.  This image
 # will be used for the designate-manage script.
 #
+# [*release_name*] (required) Openstack release name (kilo, liberty) associated
+# with this image.  Used to populate default configuration files.
+#
 # [*active_image_tag*] (optional) Tag of the active_image_name to use.
 # Default: 'latest'
 #
 # [*active_image_overrides*] (optional) Extra parameters to pass into
 # Docker::Image when creating the active image resource.  Default: {}
-
-# [*release_name*] (required) Openstack release name (kilo, liberty) associated
-# with this image.  Used to populate default configuration files.
 #
 # [*extra_images*] (optional) Additional images associated with this service
 # that should be pulled.  This is passed directly to Docker::Image.  This may
@@ -28,15 +28,13 @@
 #
 # [*config_files*] (optional) Hash of filenames and parameters to the
 # os_docker::config_file defined type.  Filenames should be relative to
-# /etc/designate.  For virtualenv installs example config files can be copied
-# from the module, or provided by the user.  Default:
-# $::os_docker::designate::params::config_files
+# /etc/designate. Default: $::os_docker::designate::params::config_files
 #
 class os_docker::designate(
+  $release_name,
   $active_image_name,
   $active_image_tag       = 'latest',
   $active_image_overrides = {},
-  $release_name,
   $extra_images           = {},
   $config_files           = $::os_docker::designate::params::config_files,
 ) inherits os_docker::designate::params {
