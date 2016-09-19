@@ -56,10 +56,10 @@ define os_docker::config_file(
   $owner,
   $group,
   $source_dir,
-  $path          = $name,
-  $mode          = '0640',
-  $ensure        = file,
-  $replace       = false,
+  $path       = $name,
+  $mode       = '0640',
+  $ensure     = file,
+  $replace    = false,
 ) {
   if $path =~ /^\// {
     $file = regsubst($path, "^${config_dir}/", '')

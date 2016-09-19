@@ -9,18 +9,18 @@
 #
 # === Parameters
 #
+# [*release_name*] (required) Openstack release name (kilo, liberty) associated
+# with this image.  Used to populate default configuration files.
+#
 # [*active_image_name*] (required) Name of the image to use by default for all
 # neutron services.  This can overridden on a per service basis. This image will
 # be used for the neutron-manage script.
 #
 # [*active_image_tag*] (optional) Tag of the active_image_name to use.
 # Default: 'latest'
-
+#
 # [*active_image_overrides*] (optional) Extra parameters to pass into
 # Docker::Image when creating the active image resource.  Default: {}
-#
-# [*release_name*] (required) Openstack release name (kilo, liberty) associated
-# with this image.  Used to populate default configuration files.
 #
 # [*extra_images*] (optional) Additional images associated with this service
 # that should be pulled.  This is passed directly to Docker::Image.  This may
@@ -28,21 +28,19 @@
 #
 # [*config_files*] (optional) Hash of filenames and parameters to the
 # os_docker::config_file defined type.  Filenames should be relative to
-# /etc/neutron.  For virtualenv installs example config files can be copied from
-# the module, or provided by the user.  Default:
-# $::os_docker::neutron::params::config_files
+# /etc/neutron. Default: $::os_docker::neutron::params::config_files
 #
 # [*groups*] (optional) Groups that the neutron user inside the container should
 # be a member of.
 #
 class os_docker::neutron(
-  $active_image_name,
-  $active_image_tag  = 'latest',
-  $active_image_overrides = {},
   $release_name,
-  $extra_images = {},
-  $config_files = $::os_docker::neutron::params::config_files,
-  $groups = [],
+  $active_image_name,
+  $active_image_tag       = 'latest',
+  $active_image_overrides = {},
+  $extra_images           = {},
+  $config_files           = $::os_docker::neutron::params::config_files,
+  $groups                 = [],
 ) inherits os_docker::neutron::params {
 
   $environment = [
