@@ -23,7 +23,7 @@ class os_docker::cinder::params {
     '/etc/cinder/rootwrap.d/volume.filters'     => { replace => true },
   }
 
-  volumes => [
+  $volumes = [
     '/etc/cinder:/etc/cinder:ro',
     '/etc/ceph:/etc/ceph:ro',
     '/etc/cinder/groups:/etc/cinder/groups:ro',
@@ -34,11 +34,11 @@ class os_docker::cinder::params {
     '/var/run/monasca:/var/run/monasca',
     '/var/lib/ceph:/var/lib/ceph',
     '/usr/lib/ceph:/usr/lib/ceph',
-        ]
+  ]
 
-  backup_volumes => [
+  $backup_volumes = [
    '/etc/cinder:/etc/cinder:ro',
-   '/etc/ceph:/etc/ceph:ro
+   '/etc/ceph:/etc/ceph:ro',
    '/etc/cinder/groups:/etc/cinder/groups:ro',
    '/var/log/cinder:/var/log/cinder',
    '/var/lock/cinder:/var/lock/cinder',

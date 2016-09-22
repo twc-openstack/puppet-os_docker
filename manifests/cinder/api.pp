@@ -23,6 +23,10 @@
 # service container.  Defaults to the active container set via the main
 # os_docker::cinder class.
 #
+# [*extra_volumes*] (optional) Extra docker volumes to mount inside the
+# container.  This will be passed directly to docker in addition tho the normal
+# volumes
+#
 # [*before_start*] (optional) Shell script part that will be run before the
 # service is started.
 #
@@ -34,6 +38,7 @@ class os_docker::cinder::api(
   $active_image_tag     = $::os_docker::cinder::active_image_tag,
   $enable_monasca       = true,
   $monasca_event_socket = '/tmp/eventsocket',
+  $extra_volumes        = [],
   $before_start         = false,
 ){
   include ::os_docker::cinder
@@ -51,6 +56,7 @@ class os_docker::cinder::api(
         service_prefix   => '',
         manage_service   => false,
         extra_parameters => ['--restart=always'],
+        before_start     => $before_start,
       }
 
       $api_resource = merge($default_params, $run_override)

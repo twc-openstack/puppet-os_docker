@@ -91,12 +91,8 @@ class os_docker::cinder(
     command => '/usr/bin/cinder-manage',
     image   => "${active_image_name}:${active_image_tag}",
     net     => 'host',
-    env              => $environment,
-    volumes => [
-      '/etc/cinder:/etc/cinder:ro',
-      '/var/log/cinder:/var/log/cinder',
-      '/var/run/cinder:/var/run/cinder',
-    ],
+    env     => $environment,
+    volumes => $os_docker::cinder::params::volumes,
     tag     => ['cinder-docker'],
   }
 

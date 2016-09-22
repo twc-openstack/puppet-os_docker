@@ -20,11 +20,20 @@
 # service container.  Defaults to the active container set via the main
 # os_docker::cinder class.
 #
+# [*extra_volumes*] (optional) Extra docker volumes to mount inside the
+# container.  This will be passed directly to docker in addition tho the normal
+# volumes
+#
+# [*before_start*] (optional) Shell script part that will be run before the
+# service is started.
+#
 class os_docker::cinder::backup(
   $manage_service    = true,
   $run_override      = {},
   $active_image_name = $::os_docker::cinder::active_image_name,
   $active_image_tag  = $::os_docker::cinder::active_image_tag,
+  $extra_volumes     = [],
+  $before_start      = false,
 ){
   include ::os_docker::cinder
   include ::os_docker::cinder::params
@@ -32,14 +41,15 @@ class os_docker::cinder::backup(
   if $active_image_name {
     if $manage_service {
       $default_params = {
-        image   => "${active_image_name}:${active_image_tag}",
-        command => '/usr/bin/cinder-backup',
-        net     => 'host',
-        volumes => concat($os_docker::cinder::params::backup_volumes, $extra_volumes),
-        tag => ['cinder-docker'],
-        service_prefix => '',
-        manage_service => false,
+        image            => "${active_image_name}:${active_image_tag}",
+        command          => '/usr/bin/cinder-backup',
+        net              => 'host',
+        volumes          => concat($os_docker::cinder::params::backup_volumes, $extra_volumes),
+        tag              => ['cinder-docker'],
+        service_prefix   => '',
+        manage_service   => false,
         extra_parameters => ['--restart=always'],
+        before_start     => $before_start,
       }
 
       $backup_resource = merge($default_params, $run_override)
