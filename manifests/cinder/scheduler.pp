@@ -27,6 +27,7 @@ class os_docker::cinder::scheduler(
   $active_image_tag  = $::os_docker::cinder::active_image_tag,
 ){
   include ::os_docker::cinder
+  include ::os_docker::cinder::params
 
   if $active_image_name {
     if $manage_service {
@@ -34,10 +35,7 @@ class os_docker::cinder::scheduler(
         image   => "${active_image_name}:${active_image_tag}",
         command => '/usr/bin/cinder-scheduler',
         net     => 'host',
-        volumes => [
-          '/etc/cinder:/etc/cinder:ro',
-          '/var/log/cinder:/var/log/cinder',
-        ],
+        volumes => concat($os_docker::cinder::params::volumes, $extra_volumes),
         tag => ['cinder-docker'],
         service_prefix => '',
         manage_service => false,
@@ -52,10 +50,7 @@ class os_docker::cinder::scheduler(
       command => '/usr/bin/cinder-scheduler',
       image   => "${active_image_name}:${active_image_tag}",
       net     => 'host',
-      volumes => [
-        '/etc/cinder:/etc/cinder:ro',
-        '/var/log/cinder:/var/log/cinder',
-      ],
+      volumes => concat($os_docker::cinder::params::volumes, $extra_volumes),
       tag     => ['cinder-docker'],
     }
   }

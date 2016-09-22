@@ -37,29 +37,16 @@ class os_docker::cinder::api(
   $before_start         = false,
 ){
   include ::os_docker::cinder
+  include ::os_docker::cinder::params
 
   if $active_image_name {
-    $vols_default = [
-      '/etc/cinder:/etc/cinder:ro',
-      '/var/log/cinder:/var/log/cinder',
-      '/var/lock/cinder:/var/lock/cinder',
-      '/var/lib/cinder:/var/lib/cinder',
-      '/var/run/monasca:/var/run/monasca',
-    ]
-
-    if $enable_monasca {
-      $vols = concat($vols_default, "${monasca_event_socket}:${monasca_event_socket}")
-    } else {
-      $vols = $vols_default
-    }
-
     if $manage_service {
       $default_params = {
         image            => "${active_image_name}:${active_image_tag}",
         command          => '/usr/bin/cinder-api',
         net              => 'host',
         privileged       => true,
-        volumes          => $vols,
+        volumes => concat($os_docker::cinder::params::volumes, $extra_volumes),
         tag              => ['cinder-docker'],
         service_prefix   => '',
         manage_service   => false,
@@ -75,7 +62,7 @@ class os_docker::cinder::api(
       image      => "${active_image_name}:${active_image_tag}",
       net        => 'host',
       privileged => true,
-      volumes    => $vols,
+      volumes => concat($os_docker::cinder::params::volumes, $extra_volumes),
       tag        => ['cinder-docker'],
     }
 

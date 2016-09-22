@@ -27,6 +27,7 @@ class os_docker::cinder::backup(
   $active_image_tag  = $::os_docker::cinder::active_image_tag,
 ){
   include ::os_docker::cinder
+  include ::os_docker::cinder::params
 
   if $active_image_name {
     if $manage_service {
@@ -34,10 +35,7 @@ class os_docker::cinder::backup(
         image   => "${active_image_name}:${active_image_tag}",
         command => '/usr/bin/cinder-backup',
         net     => 'host',
-        backups => [
-          '/etc/cinder:/etc/cinder:ro',
-          '/var/log/cinder:/var/log/cinder',
-        ],
+        volumes => concat($os_docker::cinder::params::backup_volumes, $extra_volumes),
         tag => ['cinder-docker'],
         service_prefix => '',
         manage_service => false,
@@ -52,10 +50,7 @@ class os_docker::cinder::backup(
       command => '/usr/bin/cinder-backup',
       image   => "${active_image_name}:${active_image_tag}",
       net     => 'host',
-      backups => [
-        '/etc/cinder:/etc/cinder:ro',
-        '/var/log/cinder:/var/log/cinder',
-      ],
+      volumes => concat($os_docker::cinder::params::backup_volumes, $extra_volumes),
       tag     => ['cinder-docker'],
     }
   }
