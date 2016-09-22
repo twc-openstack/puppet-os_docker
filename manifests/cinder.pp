@@ -37,7 +37,38 @@ class os_docker::cinder(
   $active_image_overrides = {},
   $extra_images           = {},
   $config_files           = $::os_docker::cinder::params::config_files,
+  $groups                 = ['ceph'],
 ) inherits os_docker::cinder::params {
+
+  # This directory exists to hold files the cinder user needs to be able to
+  # read.  The container is expected to ensure the cinder user inside the
+  # container is a member of the groups that own the files in the directory.
+  file { '/etc/cinder/groups':
+    ensure  => 'directory',
+    owner   => 'cinder',
+    group   => 'cinder',
+    mode    => '0755',
+    purge   => true,
+    recurse => true,
+    force   => true,
+  }
+
+  $environment = [
+    'OS_DOCKER_GROUP_DIR=/etc/cinder/groups',
+    'OS_DOCKER_HOME_DIR=/var/lib/cinder',
+  ]
+
+  $groups.each |$group| {
+    file { "/etc/cinder/groups/$group":
+      ensure  => 'file',
+      owner   => 'cinder',
+      group   => $group,
+      content => '',
+      require => [
+        Package['ceph'],
+      ],
+    }
+  }
 
   file { $::os_docker::cinder::params::managed_dirs:
     ensure => directory,
@@ -60,9 +91,11 @@ class os_docker::cinder(
     command => '/usr/bin/cinder-manage',
     image   => "${active_image_name}:${active_image_tag}",
     net     => 'host',
+    env              => $environment,
     volumes => [
       '/etc/cinder:/etc/cinder:ro',
       '/var/log/cinder:/var/log/cinder',
+      '/var/run/cinder:/var/run/cinder',
     ],
     tag     => ['cinder-docker'],
   }
@@ -91,7 +124,7 @@ class os_docker::cinder(
 
   # The cinder user isn't a docker user and this runs as the cinder user inside the
   # container anyway.
-  Exec<| title == 'cinder-dbsync' |> {
+  Exec<| title == 'cinder-manage db_sync' |> {
     user => 'root',
   }
 }
