@@ -4,7 +4,7 @@ BASEDIR=$(cd "$(dirname "$0")"; pwd)
 EXCEPTIONDIR=$BASEDIR/exceptions
 
 PROJECTS="designate glance heat keystone nova neutron cinder ironic"
-RELEASES="juno kilo liberty mitaka"
+RELEASES="juno kilo liberty mitaka newton"
 
 declare -A BRANCHES
 BRANCHES=(
