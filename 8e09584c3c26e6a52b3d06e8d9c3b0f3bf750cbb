@@ -1,0 +1,9 @@
+Verified+1: Jenkins User <jenkins@twcable.com>
+Workflow+1: Clayton O'Neill <clayton.oneill@charter.com>
+Code-Review+1: Craig DeLatte <craig.delatte@twcable.com>
+Code-Review+2: Clayton O'Neill <clayton.oneill@charter.com>
+Submitted-by: Clayton O'Neill <clayton.oneill@charter.com>
+Submitted-at: Fri, 23 Sep 2016 12:52:09 +0000
+Reviewed-on: https://bfd-gerrit.os.cloud.twc.net/12705
+Project: puppet-os_docker
+Branch: refs/heads/master
