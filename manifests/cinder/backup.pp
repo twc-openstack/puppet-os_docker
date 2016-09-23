@@ -44,6 +44,7 @@ class os_docker::cinder::backup(
         image            => "${active_image_name}:${active_image_tag}",
         command          => '/usr/bin/cinder-backup',
         net              => 'host',
+        env              => $os_docker::cinder::params::environment,
         volumes          => concat($os_docker::cinder::params::backup_volumes, $extra_volumes),
         tag              => ['cinder-docker'],
         service_prefix   => '',
@@ -60,6 +61,7 @@ class os_docker::cinder::backup(
       command => '/usr/bin/cinder-backup',
       image   => "${active_image_name}:${active_image_tag}",
       net     => 'host',
+      env     => $os_docker::cinder::params::environment,
       volumes => concat($os_docker::cinder::params::backup_volumes, $extra_volumes),
       tag     => ['cinder-docker'],
     }

@@ -65,6 +65,7 @@ class os_docker::cinder::volume(
         image            => "${active_image_name}:${active_image_tag}",
         command          => '/usr/bin/cinder-volume',
         net              => 'host',
+        env              => $os_docker::cinder::params::environment,
         volumes          => concat($os_docker::cinder::params::volumes, $nfs_volumes, $extra_volumes),
         tag              => ['cinder-docker'],
         service_prefix   => '',
@@ -81,6 +82,7 @@ class os_docker::cinder::volume(
       command => '/usr/bin/cinder-volume',
       image   => "${active_image_name}:${active_image_tag}",
       net     => 'host',
+      env     => $os_docker::cinder::params::environment,
       volumes => concat($os_docker::cinder::params::volumes, $nfs_volumes, $extra_volumes),
       tag     => ['cinder-docker'],
     }
