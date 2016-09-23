@@ -38,13 +38,13 @@ class os_docker::cinder::params {
   ]
 
   $backup_volumes = [
-   '/etc/cinder:/etc/cinder:ro',
-   '/etc/ceph:/etc/ceph:ro',
-   '/etc/cinder/groups:/etc/cinder/groups:ro',
-   '/var/log/cinder:/var/log/cinder',
-   '/var/lock/cinder:/var/lock/cinder',
-   '/var/lib/cinder:/var/lib/cinder',
-   '/var/run/cinder:/var/run/cinder',
+    '/etc/cinder:/etc/cinder:ro',
+    '/etc/ceph:/etc/ceph:ro',
+    '/etc/cinder/groups:/etc/cinder/groups:ro',
+    '/var/log/cinder:/var/log/cinder',
+    '/var/lock/cinder:/var/lock/cinder',
+    '/var/lib/cinder:/var/lib/cinder',
+    '/var/run/cinder:/var/run/cinder',
   ]
 
 }
