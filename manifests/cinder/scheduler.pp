@@ -33,7 +33,7 @@ class os_docker::cinder::scheduler(
   $active_image_name = $::os_docker::cinder::active_image_name,
   $active_image_tag  = $::os_docker::cinder::active_image_tag,
   $extra_volumes     = [],
-  $before_start      = false,
+  $before_start      = $::os_docker::cinder::before_start,
 ){
   include ::os_docker::cinder
   include ::os_docker::cinder::params

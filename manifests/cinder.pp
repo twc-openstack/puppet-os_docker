@@ -30,6 +30,9 @@
 # os_docker::config_file defined type.  Filenames should be relative to
 # /etc/cinder. Default: $::os_docker::cinder::params::config_files
 #
+# [*before_start*] (optional) Shell script part that will be run before the
+# service is started.
+#
 class os_docker::cinder(
   $release_name,
   $active_image_name,
@@ -38,6 +41,8 @@ class os_docker::cinder(
   $extra_images           = {},
   $config_files           = $::os_docker::cinder::params::config_files,
   $groups                 = ['ceph'],
+
+  $before_start           = '',
 ) inherits os_docker::cinder::params {
 
   # This directory exists to hold files the cinder user needs to be able to

@@ -39,7 +39,7 @@ class os_docker::cinder::api(
   $enable_monasca       = true,
   $monasca_event_socket = '/tmp/eventsocket',
   $extra_volumes        = [],
-  $before_start         = false,
+  $before_start         = $::os_docker::cinder::before_start,
 ){
   include ::os_docker::cinder
   include ::os_docker::cinder::params

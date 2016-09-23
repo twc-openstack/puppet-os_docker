@@ -37,7 +37,7 @@ class os_docker::cinder::volume(
   $active_image_name = $::os_docker::cinder::active_image_name,
   $active_image_tag  = $::os_docker::cinder::active_image_tag,
   $extra_volumes     = [],
-  $before_start      = false,
+  $before_start      = $::os_docker::cinder::before_start,
   $enable_nfs        = false,
 ){
   include ::os_docker::cinder
