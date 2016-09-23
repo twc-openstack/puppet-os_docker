@@ -53,11 +53,6 @@ class os_docker::cinder(
     force   => true,
   }
 
-  $environment = [
-    'OS_DOCKER_GROUP_DIR=/etc/cinder/groups',
-    'OS_DOCKER_HOME_DIR=/var/lib/cinder',
-  ]
-
   $groups.each |$group| {
     file { "/etc/cinder/groups/$group":
       ensure  => 'file',
@@ -91,7 +86,7 @@ class os_docker::cinder(
     command => '/usr/bin/cinder-manage',
     image   => "${active_image_name}:${active_image_tag}",
     net     => 'host',
-    env     => $environment,
+    env     => $os_docker::cinder::params::environment,
     volumes => $os_docker::cinder::params::volumes,
     tag     => ['cinder-docker'],
   }

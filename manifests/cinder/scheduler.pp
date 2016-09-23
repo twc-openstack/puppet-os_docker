@@ -44,6 +44,7 @@ class os_docker::cinder::scheduler(
         image            => "${active_image_name}:${active_image_tag}",
         command          => '/usr/bin/cinder-scheduler',
         net              => 'host',
+        env              => $os_docker::cinder::params::environment,
         volumes          => concat($os_docker::cinder::params::volumes, $extra_volumes),
         tag              => ['cinder-docker'],
         service_prefix   => '',
@@ -60,6 +61,7 @@ class os_docker::cinder::scheduler(
       command => '/usr/bin/cinder-scheduler',
       image   => "${active_image_name}:${active_image_tag}",
       net     => 'host',
+      env     => $os_docker::cinder::params::environment,
       volumes => concat($os_docker::cinder::params::volumes, $extra_volumes),
       tag     => ['cinder-docker'],
     }

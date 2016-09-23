@@ -47,4 +47,8 @@ class os_docker::cinder::params {
     '/var/run/cinder:/var/run/cinder',
   ]
 
+  $environment = [
+    'OS_DOCKER_GROUP_DIR=/etc/cinder/groups',
+    'OS_DOCKER_HOME_DIR=/var/lib/cinder',
+  ]
 }
