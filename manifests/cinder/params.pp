@@ -36,8 +36,6 @@ class os_docker::cinder::params {
     '/var/lib/cinder:/var/lib/cinder',
     '/var/run/cinder:/var/run/cinder',
     '/var/run/monasca:/var/run/monasca',
-    '/var/lib/ceph:/var/lib/ceph',
-    '/usr/lib/ceph:/usr/lib/ceph',
   ]
 
   $backup_volumes = [
