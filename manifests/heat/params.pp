@@ -20,4 +20,9 @@ class os_docker::heat::params {
     '/etc/heat/templates/AWS_CloudWatch_Alarm.yaml' => { replace => true },
     '/etc/heat/templates/AWS_RDS_DBInstance.yaml'   => { replace => true },
   }
+
+  $volumes = [
+    '/etc/heat:/etc/heat:ro',
+    '/var/log/heat:/var/log/heat',
+  ]
 }
