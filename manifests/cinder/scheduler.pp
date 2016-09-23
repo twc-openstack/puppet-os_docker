@@ -45,10 +45,6 @@ class os_docker::cinder::scheduler(
         command          => '/usr/bin/cinder-scheduler',
         net              => 'host',
         volumes          => concat($os_docker::cinder::params::volumes, $extra_volumes),
-        volumes          => [
-          '/etc/cinder:/etc/cinder:ro',
-          '/var/log/cinder:/var/log/cinder',
-        ],
         tag              => ['cinder-docker'],
         service_prefix   => '',
         manage_service   => false,

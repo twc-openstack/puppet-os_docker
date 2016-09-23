@@ -51,7 +51,7 @@ class os_docker::cinder::api(
         command          => '/usr/bin/cinder-api',
         net              => 'host',
         privileged       => true,
-        volumes => concat($os_docker::cinder::params::volumes, $extra_volumes),
+        volumes          => concat($os_docker::cinder::params::volumes, $extra_volumes),
         tag              => ['cinder-docker'],
         service_prefix   => '',
         manage_service   => false,
@@ -68,7 +68,7 @@ class os_docker::cinder::api(
       image      => "${active_image_name}:${active_image_tag}",
       net        => 'host',
       privileged => true,
-      volumes => concat($os_docker::cinder::params::volumes, $extra_volumes),
+      volumes    => concat($os_docker::cinder::params::volumes, $extra_volumes),
       tag        => ['cinder-docker'],
     }
 
