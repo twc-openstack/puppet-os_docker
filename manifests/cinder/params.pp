@@ -26,24 +26,20 @@ class os_docker::cinder::params {
 
   $volumes = [
     '/etc/cinder:/etc/cinder:ro',
-    '/etc/ceph:/etc/ceph:ro',
-    '/etc/cinder/groups:/etc/cinder/groups:ro',
-    # /etc/iscsi and /dev are needed for iscsi cinder volumes
-    '/etc/iscsi:/etc/iscsi',
-    '/dev:/dev',
     '/var/log/cinder:/var/log/cinder',
     '/var/lock/cinder:/var/lock/cinder',
     '/var/lib/cinder:/var/lib/cinder',
-    '/var/run/cinder:/var/run/cinder',
+    '/run/cinder:/run/cinder',
     '/var/run/monasca:/var/run/monasca',
-    '/var/lib/ceph:/var/lib/ceph',
-    '/usr/lib/ceph:/usr/lib/ceph',
+  ]
+
+  $ceph_volumes = [
+    '/etc/ceph:/etc/ceph:ro',
   ]
 
   $backup_volumes = [
     '/etc/cinder:/etc/cinder:ro',
     '/etc/ceph:/etc/ceph:ro',
-    '/etc/cinder/groups:/etc/cinder/groups:ro',
     '/var/log/cinder:/var/log/cinder',
     '/var/lock/cinder:/var/lock/cinder',
     '/var/lib/cinder:/var/lib/cinder',

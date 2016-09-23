@@ -33,6 +33,14 @@
 # [*before_start*] (optional) Shell script part that will be run before the
 # service is started.
 #
+# [*enable_iscsi*] (optional) If you are using an iSCSI related backend for
+# cinder you will need to set this flag to true.  It will set up extra volumes
+# in order for the iSCSI devices to be visible inside the container.
+#
+# [*enable_nfs*] (optional) If you are using the NFS backend for cinder you
+# will need to set this flag to true.  It will set up extra volumes in order
+# for the NFS mounts to be visible outside of the container.
+#
 class os_docker::cinder(
   $release_name,
   $active_image_name,
@@ -43,6 +51,8 @@ class os_docker::cinder(
   $groups                 = ['ceph'],
 
   $before_start           = '',
+  $enable_iscsi           = false,
+  $enable_nfs             = false,
 ) inherits os_docker::cinder::params {
 
   # This directory exists to hold files the cinder user needs to be able to

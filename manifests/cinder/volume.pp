@@ -27,6 +27,10 @@
 # [*before_start*] (optional) Shell script part that will be run before the
 # service is started.
 #
+# [*enable_iscsi*] (optional) If you are using an iSCSI related backend for
+# cinder you will need to set this flag to true.  It will set up extra volumes
+# in order for the iSCSI devices to be visible inside the container.
+#
 # [*enable_nfs*] (optional) If you are using the NFS backend for cinder you
 # will need to set this flag to true.  It will set up extra volumes in order
 # for the NFS mounts to be visible outside of the container.
@@ -38,7 +42,8 @@ class os_docker::cinder::volume(
   $active_image_tag  = $::os_docker::cinder::active_image_tag,
   $extra_volumes     = [],
   $before_start      = $::os_docker::cinder::before_start,
-  $enable_nfs        = false,
+  $enable_iscsi      = $::os_docker::cinder::enable_iscsi,
+  $enable_nfs        = $::os_docker::cinder::enable_nfs,
 ){
   include ::os_docker::cinder
   include ::os_docker::cinder::params
@@ -59,14 +64,36 @@ class os_docker::cinder::volume(
     $nfs_onstart = ''
   }
 
+  if $enable_iscsi {
+    $iscsi_volumes = [
+      # /etc/iscsi and /dev are needed for iscsi cinder volumes
+      '/etc/iscsi:/etc/iscsi',
+      '/dev:/dev',
+    ]
+
+    $privileged = true
+  } else {
+    $iscsi_volumes = []
+    $privileged = false
+  }
+
+  $volumes = concat(
+    $os_docker::cinder::params::volumes,
+    $os_docker::cinder::ceph_volumes,
+    $iscsi_volumes,
+    $nfs_volumes,
+    $extra_volumes,
+  )
+
   if $active_image_name {
     if $manage_service {
       $default_params = {
         image            => "${active_image_name}:${active_image_tag}",
         command          => '/usr/bin/cinder-volume',
+        privileged       => $privileged,
         net              => 'host',
         env              => $os_docker::cinder::params::environment,
-        volumes          => concat($os_docker::cinder::params::volumes, $nfs_volumes, $extra_volumes),
+        volumes          => $volumes,
         tag              => ['cinder-docker'],
         service_prefix   => '',
         manage_service   => false,
@@ -79,12 +106,13 @@ class os_docker::cinder::volume(
     }
 
     docker::command { '/usr/bin/cinder-volume':
-      command => '/usr/bin/cinder-volume',
-      image   => "${active_image_name}:${active_image_tag}",
-      net     => 'host',
-      env     => $os_docker::cinder::params::environment,
-      volumes => concat($os_docker::cinder::params::volumes, $nfs_volumes, $extra_volumes),
-      tag     => ['cinder-docker'],
+      command    => '/usr/bin/cinder-volume',
+      image      => "${active_image_name}:${active_image_tag}",
+      privileged => $privileged,
+      net        => 'host',
+      env        => $os_docker::cinder::params::environment,
+      volumes    => $volumes,
+      tag        => ['cinder-docker'],
     }
   }
 }
