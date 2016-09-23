@@ -18,4 +18,9 @@ class os_docker::designate::params {
     'rootwrap.conf'            => { replace => true  },
     'rootwrap.d/bind9.filters' => { replace => true  },
   }
+
+  $volumes = [
+    '/etc/designate:/etc/designate:ro',
+    '/var/log/designate:/var/log/designate',
+  ],
 }

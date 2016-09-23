@@ -36,8 +36,6 @@ class os_docker::cinder::api(
   $run_override         = {},
   $active_image_name    = $::os_docker::cinder::active_image_name,
   $active_image_tag     = $::os_docker::cinder::active_image_tag,
-  $enable_monasca       = true,
-  $monasca_event_socket = '/tmp/eventsocket',
   $extra_volumes        = [],
   $before_start         = $::os_docker::cinder::before_start,
 ){

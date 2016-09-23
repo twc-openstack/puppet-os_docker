@@ -20,27 +20,29 @@
 # service container.  Defaults to the active container set via the main
 # os_docker::heat class.
 #
+# [*extra_volumes*] (optional) Extra docker volumes to mount inside the
+# container.  This will be passed directly to docker in addition tho the normal
+# volumes
+#
 class os_docker::heat::engine(
   $manage_service    = true,
   $run_override      = {},
   $active_image_name = $::os_docker::heat::active_image_name,
   $active_image_tag  = $::os_docker::heat::active_image_tag,
+  $extra_volumes     = [],
 ){
   include ::os_docker::heat
 
   if $active_image_name {
     if $manage_service {
       $default_params = {
-        image   => "${active_image_name}:${active_image_tag}",
-        command => '/usr/bin/heat-engine',
-        net     => 'host',
-        volumes => [
-          '/etc/heat:/etc/heat:ro',
-          '/var/log/heat:/var/log/heat',
-        ],
-        tag => ['heat-docker'],
-        service_prefix => '',
-        manage_service => false,
+        image            => "${active_image_name}:${active_image_tag}",
+        command          => '/usr/bin/heat-engine',
+        net              => 'host',
+        volumes          => concat($os_docker::heat::params::volumes, $extra_volumes),
+        tag              => ['heat-docker'],
+        service_prefix   => '',
+        manage_service   => false,
         extra_parameters => ['--restart=always'],
       }
 
@@ -52,10 +54,7 @@ class os_docker::heat::engine(
       command => '/usr/bin/heat-engine',
       image   => "${active_image_name}:${active_image_tag}",
       net     => 'host',
-      volumes => [
-        '/etc/heat:/etc/heat:ro',
-        '/var/log/heat:/var/log/heat',
-      ],
+      volumes => concat($os_docker::heat::params::volumes, $extra_volumes),
       tag     => ['heat-docker'],
     }
   }

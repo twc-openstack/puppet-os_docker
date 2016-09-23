@@ -23,31 +23,27 @@
 # service container.  Defaults to the active container set via the main
 # os_docker::nova class.
 #
+# [*extra_volumes*] (optional) Extra docker volumes to mount inside the
+# container.  This will be passed directly to docker in addition tho the normal
+# volumes
+#
 class os_docker::nova::api(
-  $manage_service       = true,
-  $enable_uwsgitop      = true,
-  $run_override         = {},
-  $active_image_name    = $::os_docker::nova::active_image_name,
-  $active_image_tag     = $::os_docker::nova::active_image_tag,
-  $enable_monasca       = true,
-  $monasca_event_socket = '/tmp/eventsocket',
+  $manage_service    = true,
+  $enable_uwsgitop   = true,
+  $run_override      = {},
+  $active_image_name = $::os_docker::nova::active_image_name,
+  $active_image_tag  = $::os_docker::nova::active_image_tag,
+  $extra_volumes     = [],
 ){
   include ::os_docker::nova
 
   if $active_image_name {
-    $vols_default = [
+    $volumes = [
       '/etc/nova:/etc/nova:ro',
       '/var/log/nova:/var/log/nova',
       '/var/lock/nova:/var/lock/nova',
       '/var/lib/nova:/var/lib/nova',
-      '/var/run/monasca:/var/run/monasca',
     ]
-
-    if $enable_monasca {
-      $vols = concat($vols_default, "${monasca_event_socket}:${monasca_event_socket}")
-    } else {
-      $vols = $vols_default
-    }
 
     if $manage_service {
       $default_params = {
@@ -55,7 +51,7 @@ class os_docker::nova::api(
         command          => '/usr/bin/nova-api',
         net              => 'host',
         privileged       => true,
-        volumes          => $vols,
+        volumes          => concat($volumes, $extra_volumes),
         tag              => ['nova-docker'],
         service_prefix   => '',
         manage_service   => false,
@@ -71,7 +67,7 @@ class os_docker::nova::api(
       image      => "${active_image_name}:${active_image_tag}",
       net        => 'host',
       privileged => true,
-      volumes    => $vols,
+      volumes    => concat($volumes, $extra_volumes),
       tag        => ['nova-docker'],
     }
 

@@ -20,28 +20,29 @@
 # service container.  Defaults to the active container set via the main
 # os_docker::designate class.
 #
+# [*extra_volumes*] (optional) Extra docker volumes to mount inside the
+# container.  This will be passed directly to docker in addition tho the normal
+# volumes
+#
 class os_docker::designate::api(
   $manage_service    = true,
   $run_override      = {},
   $active_image_name = $::os_docker::designate::active_image_name,
   $active_image_tag  = $::os_docker::designate::active_image_tag,
+  $extra_volumes     = [],
 ){
   include ::os_docker::designate
 
   if $active_image_name {
     if $manage_service {
       $default_params = {
-        image   => "${active_image_name}:${active_image_tag}",
-        command => '/usr/bin/designate-api',
-        net     => 'host',
-        volumes => [
-          '/etc/designate:/etc/designate:ro',
-          '/var/log/designate:/var/log/designate',
-          '/var/run/monasca:/var/run/monasca',
-        ],
-        tag => ['designate-docker'],
-        service_prefix => '',
-        manage_service => false,
+        image            => "${active_image_name}:${active_image_tag}",
+        command          => '/usr/bin/designate-api',
+        net              => 'host',
+        volumes          => concat($os_docker::designate::params::volumes, $extra_volumes),
+        tag              => ['designate-docker'],
+        service_prefix   => '',
+        manage_service   => false,
         extra_parameters => ['--restart=always'],
       }
 
@@ -53,11 +54,7 @@ class os_docker::designate::api(
       command => '/usr/bin/designate-api',
       image   => "${active_image_name}:${active_image_tag}",
       net     => 'host',
-      volumes => [
-        '/etc/designate:/etc/designate:ro',
-        '/var/log/designate:/var/log/designate',
-        '/var/run/monasca:/var/run/monasca',
-      ],
+      volumes => concat($os_docker::designate::params::volumes, $extra_volumes),
       tag     => ['designate-docker'],
     }
   }

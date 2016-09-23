@@ -23,12 +23,17 @@
 # service container.  Defaults to the active container set via the main
 # os_docker::keystone class.
 #
+# [*extra_volumes*] (optional) Extra docker volumes to mount inside the
+# container.  This will be passed directly to docker in addition tho the normal
+# volumes
+#
 class os_docker::keystone::all(
   $manage_service    = true,
   $enable_uwsgitop   = true,
   $run_override      = {},
   $active_image_name = $::os_docker::keystone::active_image_name,
   $active_image_tag  = $::os_docker::keystone::active_image_tag,
+  $extra_volumes     = [],
 ){
   include ::os_docker::keystone
   include ::os_docker::keystone::params
@@ -36,13 +41,13 @@ class os_docker::keystone::all(
   if $active_image_name {
     if $manage_service {
       $default_params = {
-        image   => "${active_image_name}:${active_image_tag}",
-        command => '/usr/bin/keystone',
-        net     => 'host',
-        volumes => $::os_docker::keystone::params::volumes,
-        tag => ['keystone-docker'],
-        service_prefix => '',
-        manage_service => false,
+        image            => "${active_image_name}:${active_image_tag}",
+        command          => '/usr/bin/keystone',
+        net              => 'host',
+        volumes          => concat($::os_docker::keystone::params::volumes, $extra_volumes),
+        tag              => ['keystone-docker'],
+        service_prefix   => '',
+        manage_service   => false,
         extra_parameters => ['--restart=always'],
       }
 
@@ -54,7 +59,7 @@ class os_docker::keystone::all(
       command => '/usr/bin/keystone-api',
       image   => "${active_image_name}:${active_image_tag}",
       net     => 'host',
-      volumes => $::os_docker::keystone::params::volumes,
+      volumes => concat($::os_docker::keystone::params::volumes, $extra_volumes),
       tag     => ['keystone-docker'],
     }
 

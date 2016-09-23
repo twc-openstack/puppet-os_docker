@@ -30,7 +30,6 @@ class os_docker::cinder::params {
     '/var/lock/cinder:/var/lock/cinder',
     '/var/lib/cinder:/var/lib/cinder',
     '/run/cinder:/run/cinder',
-    '/var/run/monasca:/var/run/monasca',
   ]
 
   $ceph_volumes = [
