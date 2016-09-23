@@ -5,6 +5,7 @@ class os_docker::cinder::params {
     '/etc/cinder',
     '/etc/cinder/rootwrap.d',
     '/var/lib/cinder',
+    '/var/lib/cinder/mnt',
     '/var/lock/cinder',
     '/var/log/cinder',
   ]
