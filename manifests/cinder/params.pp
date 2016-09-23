@@ -28,6 +28,9 @@ class os_docker::cinder::params {
     '/etc/cinder:/etc/cinder:ro',
     '/etc/ceph:/etc/ceph:ro',
     '/etc/cinder/groups:/etc/cinder/groups:ro',
+    # /etc/iscsi and /dev are needed for iscsi cinder volumes
+    '/etc/iscsi:/etc/iscsi',
+    '/dev:/dev',
     '/var/log/cinder:/var/log/cinder',
     '/var/lock/cinder:/var/lock/cinder',
     '/var/lib/cinder:/var/lib/cinder',
