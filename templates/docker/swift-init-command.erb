@@ -1,0 +1,34 @@
+#!/bin/bash
+#
+# This file is managed by Puppet and local changes
+# may be overwritten
+#
+#    Wrapper command for <%= @title %>
+#
+
+export HOME=/root/
+docker="/usr/bin/<%= @docker_command %>"
+
+[ -x $docker ] || exit 5
+
+<% if @pull_on_start -%>
+    $docker pull <%= @image %>
+<% end -%>
+# when 'swift-init status' is called, do not detach. swift-init
+# exit status code is used by the puppet-swift 'swift-init' provider
+# to determine service status. Remove container on exit.
+if [ "$2" == "status" ]; then
+  exec $docker run \
+  --rm <%= @docker_run_flags %> \
+  <%= @image %> \
+  <%= @command %> "$@"
+else
+# Run swift-init then detach from container.  swift-init monitors
+# and runs the swift services in the same container.
+  ID=$(exec $docker run \
+  -d <%= @docker_run_flags %> \
+  <%= @image %> \
+  <%= @command %> "$@")
+#  XXX remove once docker 1.13 releases which will allow using -d and --rm together
+  (docker wait $ID && docker rm -v $ID)&
+fi
