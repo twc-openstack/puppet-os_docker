@@ -37,6 +37,7 @@ class os_docker::swift(
   $extra_images           = {},
   $config_files           = $::os_docker::swift::params::config_files,
 ) {
+  include os_docker::swift::params
 
   $active_image = { "${active_image_name}:${active_image_tag}" => {
     image     => $active_image_name,
@@ -66,12 +67,38 @@ class os_docker::swift(
     require => User['swift'],
   }
 
+  $swift_env = [
+    'OS_DOCKER_GROUP_DIR=/etc/swift/groups',
+    'OS_DOCKER_HOME_DIR=/var/lib/swift',
+  ]
+
+
+  os_docker::command { '/usr/bin/swift-init':
+    command          => '/usr/bin/swift-init --no-daemon',
+    image            => "${active_image_name}:${active_image_tag}",
+    net              => 'host',
+    env              => $swift_env,
+    privileged       => true,
+    rm               => false,
+    detach           => false,
+    extra_parameters => ['--pid=host', '--name=swift-$1-$2'],
+    volumes => [
+      '/etc/swift:/etc/swift:ro',
+      '/var/run/swift:/var/run/swift',
+      '/srv/node:/srv/node',
+    ],
+    template_name    => 'os_docker/docker/swift-init-command.erb',
+    tag              => ['swift-docker'],
+  }
+
+  os_docker::swift::util { $::os_docker::swift::params::swift_utils: }
+
   # We want to make sure any packages are ensured absent before putting
   # replacements in place
   Anchor['swift::install::begin']
   -> Package<| tag == 'swift-package' |>
   -> Docker::Image<| tag == 'swift-docker' |>
-  -> Docker::Command<| tag == 'swift-docker' |>
+  -> Os_docker::Command<| tag == 'swift-docker' |>
   ~> Anchor['swift::install::end']
 
   Anchor['swift::service::begin']

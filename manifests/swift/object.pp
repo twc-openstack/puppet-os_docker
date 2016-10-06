@@ -46,10 +46,8 @@ define os_docker::swift::object(
     '/etc/swift:/etc/swift:ro',
     '/srv/node:/srv/node',
     '/dev/log:/dev/log',
-    '/lib/modules:/lib/modules:ro',
     '/run:/run',
     '/var/log/swift:/var/log/swift',
-    '/var/lib/swift:/var/lib/swift',
     '/var/cache/swift:/var/cache/swift',
   ]
 
@@ -68,6 +66,7 @@ define os_docker::swift::object(
       rm          => true,
       detach      => false,
       interactive => false,
+      extra_parameters => ["--name=swift-object-$name"],
       volumes     => concat($volumes, $extra_volumes),
       tag         => ['swift-docker'],
     }
