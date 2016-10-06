@@ -1,8 +1,10 @@
 # == Define: os_docker::swift::container
 #
-# This class handles any docker related changes needed for this service.
-# Currently this includes creating the docker container and the startup script
-# to go with it.
+# Creates a wrapper command around the container services passed in. These
+# wrappers can be used to start the services directly in their own container
+# which can be useful for debug purposes.
+# Currently this includes creating the docker container and the os command
+# to run it.
 #
 # === Parameters
 #
@@ -23,53 +25,28 @@
 # service container.  Defaults to the active container set via the main
 # os_docker::swift class.
 #
-# [*extra_volumes*] (optional) Extra docker volumes to mount inside the
-# container.  This will be passed directly to docker in addition tho the normal
-# volumes
-#
-# [*before_start*] (optional) Shell script part that will be run before the
-# service is started.  This can be used to ensure neutron-ovs-cleanup has
-# already run before swift-compute is started.
-#
 define os_docker::swift::container(
   $manage_service    = true,
   $run_override      = {},
   $active_image_name = $::os_docker::swift::active_image_name,
   $active_image_tag  = $::os_docker::swift::active_image_tag,
-  $extra_volumes     = [],
-  $before_start      = false,
 ){
   include ::os_docker::swift
+  include ::os_docker::swift::params
   validate_re($name, '^auditor|server|sync|replicator|updater$')
 
-  $volumes = [
-    '/etc/swift:/etc/swift:ro',
-    '/srv/node:/srv/node',
-    '/dev/log:/dev/log',
-    '/lib/modules:/lib/modules:ro',
-    '/run:/run',
-    '/var/log/swift:/var/log/swift',
-    '/var/lib/swift:/var/lib/swift',
-    '/var/cache/swift:/var/cache/swift',
-  ]
-
-  $environment = [
-    'OS_DOCKER_GROUP_DIR=/etc/swift/groups',
-    'OS_DOCKER_HOME_DIR=/var/lib/swift',
-  ]
-
   if $active_image_name {
-    docker::command { "/usr/bin/swift-container-$name":
-      command     => "/usr/bin/swift-container-$name",
-      image       => "${active_image_name}:${active_image_tag}",
-      net         => 'host',
-      env         => $environment,
-      privileged  => false,
-      rm          => true,
-      detach      => false,
-      interactive => false,
-      volumes     => concat($volumes, $extra_volumes),
-      tag         => ['swift-docker'],
+    os_docker::command { "/usr/bin/swift-container-$name":
+      command          => "/usr/bin/swift-container-$name",
+      image            => "${active_image_name}:${active_image_tag}",
+      net              => 'host',
+      env              => $::os_docker::swift::params::environment,
+      privileged       => false,
+      rm               => true,
+      detach           => false,
+      extra_parameters => ['--pid=host', "--name=swift-container-${name}"],
+      volumes          => $::os_docker::swift::params::volumes,
+      tag              => ['swift-docker'],
     }
   }
 }
