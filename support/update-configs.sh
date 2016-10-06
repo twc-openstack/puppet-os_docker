@@ -3,7 +3,7 @@
 BASEDIR=$(cd "$(dirname "$0")"; pwd)
 EXCEPTIONDIR=$BASEDIR/exceptions
 
-PROJECTS="designate glance heat keystone nova neutron cinder ironic"
+PROJECTS="designate glance heat keystone nova neutron cinder ironic swift"
 RELEASES="juno kilo liberty mitaka newton"
 
 declare -A BRANCHES
@@ -51,10 +51,17 @@ for PROJECT in $PROJECTS; do
       fi
 
       # Some of the sample nova config files are _sample.conf instead of
-      # .conf.sample which throws off the assumptions. in the config file
+      # .conf.sample which throws off the assumptions in the config file
       # classes.
       for i in $(find $CONFDIR -name '*_sample.conf'); do
         mv $i $(dirname $i)/$(basename $i _sample.conf).conf.sample
+      done
+
+      # All of the sample swift config files are *.conf-sample instead of
+      # .conf.sample which throws off the assumptions in the config file
+      # classes.
+      for i in $(find $CONFDIR -name '*.conf-sample'); do
+        mv $i $(dirname $i)/$(basename $i .conf-sample).conf.sample
       done
 
       rm -rf $CONFDIR/oslo-config-generator
