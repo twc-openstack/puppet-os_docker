@@ -70,7 +70,7 @@ define os_docker::config_file(
   }
 
   if $source_dir {
-    $source = ["${source_dir}/${file}", "${source_dir}/${file}.sample"]
+    $source = ["${source_dir}/${file}", "${source_dir}/${file}.sample", "${source_dir}/${file}-sample",]
   }
 
   file { $path_real:
