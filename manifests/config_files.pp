@@ -43,7 +43,7 @@ define os_docker::config_files(
   if getvar("::${project_name}_release") != $release_name {
     Os_docker::Config_file<|tag == "os_docker-${project_name}-config-file"|> {
       replace => true,
-    }
+   }
   }
 
   file { "/etc/${project_name}/release_name":
