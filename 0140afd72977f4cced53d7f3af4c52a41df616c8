@@ -1,0 +1,9 @@
+Verified+1: Jenkins User <jenkins@twcable.com>
+Code-Review+1: Carlos Konstanski <openstack@pippiandcarlos.com>
+Workflow+1: Carlos Konstanski <openstack@pippiandcarlos.com>
+Code-Review+2: Clayton O'Neill <clayton.oneill@charter.com>
+Submitted-by: Clayton O'Neill <clayton.oneill@charter.com>
+Submitted-at: Tue, 18 Oct 2016 16:24:03 +0000
+Reviewed-on: https://bfd-gerrit.os.cloud.twc.net/13191
+Project: puppet-os_docker
+Branch: refs/heads/master
