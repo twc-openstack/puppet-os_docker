@@ -753,98 +753,53 @@
 # (integer value)
 #store_capabilities_update_min_interval = 0
 
-# Specify the path to the CA bundle file to use in verifying the
-# remote server certificate. (string value)
-#https_ca_certificates_file = <None>
+# ESX/ESXi or vCenter Server target system. The server value can be an
+# IP address or a DNS name. (string value)
+#vmware_server_host = <None>
 
-# If true, the remote server certificate is not verified. If false,
-# then the default CA truststore is used for verification. This option
-# is ignored if "https_ca_certificates_file" is set. (boolean value)
-#https_insecure = true
+# Username for authenticating with VMware ESX/VC server. (string
+# value)
+#vmware_server_username = <None>
 
-# Specify the http/https proxy information that should be used to
-# connect to the remote server. The proxy information should be a key
-# value pair of the scheme and proxy. e.g. http:10.0.0.1:3128. You can
-# specify proxies for multiple schemes by seperating the key value
-# pairs with a comma.e.g. http:10.0.0.1:3128, https:10.0.0.1:1080.
-# (dict value)
-#http_proxy_information =
+# Password for authenticating with VMware ESX/VC server. (string
+# value)
+#vmware_server_password = <None>
 
-# The host where the S3 server is listening. (string value)
-#s3_store_host = <None>
+# Number of times VMware ESX/VC server API must be retried upon
+# connection related issues. (integer value)
+#vmware_api_retry_count = 10
 
-# The S3 query token access key. (string value)
-#s3_store_access_key = <None>
+# The interval used for polling remote tasks invoked on VMware ESX/VC
+# server. (integer value)
+#vmware_task_poll_interval = 5
 
-# The S3 query token secret key. (string value)
-#s3_store_secret_key = <None>
+# The name of the directory where the glance images will be stored in
+# the VMware datastore. (string value)
+#vmware_store_image_dir = /openstack_glance
 
-# The S3 bucket to be used to store the Glance data. (string value)
-#s3_store_bucket = <None>
+# If true, the ESX/vCenter server certificate is not verified. If
+# false, then the default CA truststore is used for verification. This
+# option is ignored if "vmware_ca_file" is set. (boolean value)
+# Deprecated group/name - [DEFAULT]/vmware_api_insecure
+#vmware_insecure = false
 
-# The local directory where uploads will be staged before they are
-# transferred into S3. (string value)
-#s3_store_object_buffer_dir = <None>
+# Specify a CA bundle file to use in verifying the ESX/vCenter server
+# certificate. (string value)
+#vmware_ca_file = <None>
 
-# A boolean to determine if the S3 bucket should be created on upload
-# if it does not exist or if an error should be returned to the user.
-# (boolean value)
-#s3_store_create_bucket_on_put = false
-
-# The S3 calling format used to determine the bucket. Either subdomain
-# or path can be used. (string value)
-#s3_store_bucket_url_format = subdomain
-
-# What size, in MB, should S3 start chunking image files and do a
-# multipart upload in S3. (integer value)
-#s3_store_large_object_size = 100
-
-# What multipart upload part size, in MB, should S3 use when uploading
-# parts. The size must be greater than or equal to 5M. (integer value)
-#s3_store_large_object_chunk_size = 10
-
-# The number of thread pools to perform a multipart upload in S3.
-# (integer value)
-#s3_store_thread_pools = 10
-
-# Enable the use of a proxy. (boolean value)
-#s3_store_enable_proxy = false
-
-# Address or hostname for the proxy server. (string value)
-#s3_store_proxy_host = <None>
-
-# The port to use when connecting over a proxy. (integer value)
-#s3_store_proxy_port = 8080
-
-# The username to connect to the proxy. (string value)
-#s3_store_proxy_user = <None>
-
-# The password to use when connecting over a proxy. (string value)
-#s3_store_proxy_password = <None>
-
-# RADOS images will be chunked into objects of this size (in
-# megabytes). For best performance, this should be a power of two.
-# (integer value)
-#rbd_store_chunk_size = 8
-
-# RADOS pool in which images are stored. (string value)
-#rbd_store_pool = images
-
-# RADOS user to authenticate as (only applicable if using Cephx. If
-# <None>, a default will be chosen based on the client. section in
-# rbd_store_ceph_conf) (string value)
-#rbd_store_user = <None>
-
-# Ceph configuration file path. If <None>, librados will locate the
-# default config. If using cephx authentication, this file should
-# include a reference to the right keyring in a client.<USER> section
-# (string value)
-#rbd_store_ceph_conf = /etc/ceph/ceph.conf
-
-# Timeout value (in seconds) used when connecting to ceph cluster. If
-# value <= 0, no timeout is set and default librados value is used.
-# (integer value)
-#rados_connect_timeout = 0
+# A list of datastores where the image can be stored. This option may
+# be specified multiple times for specifying multiple datastores. The
+# datastore name should be specified after its datacenter path,
+# seperated by ":". An optional weight may be given after the
+# datastore name, seperated again by ":". Thus, the required format
+# becomes <datacenter_path>:<datastore_name>:<optional_weight>. When
+# adding an image, the datastore with highest weight will be selected,
+# unless there is not enough free space available in cases where the
+# image size is already known. If no weight is given, it is assumed to
+# be zero and the directory will be considered for selection last. If
+# multiple datastores have the same weight, then the one with the most
+# free space available is selected. (multi valued)
+#vmware_datastores =
 
 # Info to match when looking for cinder in the service catalog. Format
 # is : separated values of the form:
@@ -1010,6 +965,82 @@
 # The config file that has the swift account(s)configs. (string value)
 #swift_store_config_file = <None>
 
+# The host where the S3 server is listening. (string value)
+#s3_store_host = <None>
+
+# The S3 query token access key. (string value)
+#s3_store_access_key = <None>
+
+# The S3 query token secret key. (string value)
+#s3_store_secret_key = <None>
+
+# The S3 bucket to be used to store the Glance data. (string value)
+#s3_store_bucket = <None>
+
+# The local directory where uploads will be staged before they are
+# transferred into S3. (string value)
+#s3_store_object_buffer_dir = <None>
+
+# A boolean to determine if the S3 bucket should be created on upload
+# if it does not exist or if an error should be returned to the user.
+# (boolean value)
+#s3_store_create_bucket_on_put = false
+
+# The S3 calling format used to determine the bucket. Either subdomain
+# or path can be used. (string value)
+#s3_store_bucket_url_format = subdomain
+
+# What size, in MB, should S3 start chunking image files and do a
+# multipart upload in S3. (integer value)
+#s3_store_large_object_size = 100
+
+# What multipart upload part size, in MB, should S3 use when uploading
+# parts. The size must be greater than or equal to 5M. (integer value)
+#s3_store_large_object_chunk_size = 10
+
+# The number of thread pools to perform a multipart upload in S3.
+# (integer value)
+#s3_store_thread_pools = 10
+
+# Enable the use of a proxy. (boolean value)
+#s3_store_enable_proxy = false
+
+# Address or hostname for the proxy server. (string value)
+#s3_store_proxy_host = <None>
+
+# The port to use when connecting over a proxy. (integer value)
+#s3_store_proxy_port = 8080
+
+# The username to connect to the proxy. (string value)
+#s3_store_proxy_user = <None>
+
+# The password to use when connecting over a proxy. (string value)
+#s3_store_proxy_password = <None>
+
+# RADOS images will be chunked into objects of this size (in
+# megabytes). For best performance, this should be a power of two.
+# (integer value)
+#rbd_store_chunk_size = 8
+
+# RADOS pool in which images are stored. (string value)
+#rbd_store_pool = images
+
+# RADOS user to authenticate as (only applicable if using Cephx. If
+# <None>, a default will be chosen based on the client. section in
+# rbd_store_ceph_conf) (string value)
+#rbd_store_user = <None>
+
+# Ceph configuration file path. If <None>, librados will locate the
+# default config. If using cephx authentication, this file should
+# include a reference to the right keyring in a client.<USER> section
+# (string value)
+#rbd_store_ceph_conf = /etc/ceph/ceph.conf
+
+# Timeout value (in seconds) used when connecting to ceph cluster. If
+# value <= 0, no timeout is set and default librados value is used.
+# (integer value)
+#rados_connect_timeout = 0
+
 # Images will be chunked into objects of this size (in megabytes). For
 # best performance, this should be a power of two. (integer value)
 #sheepdog_store_chunk_size = 64
@@ -1019,54 +1050,6 @@
 
 # IP address of sheep daemon. (string value)
 #sheepdog_store_address = localhost
-
-# ESX/ESXi or vCenter Server target system. The server value can be an
-# IP address or a DNS name. (string value)
-#vmware_server_host = <None>
-
-# Username for authenticating with VMware ESX/VC server. (string
-# value)
-#vmware_server_username = <None>
-
-# Password for authenticating with VMware ESX/VC server. (string
-# value)
-#vmware_server_password = <None>
-
-# Number of times VMware ESX/VC server API must be retried upon
-# connection related issues. (integer value)
-#vmware_api_retry_count = 10
-
-# The interval used for polling remote tasks invoked on VMware ESX/VC
-# server. (integer value)
-#vmware_task_poll_interval = 5
-
-# The name of the directory where the glance images will be stored in
-# the VMware datastore. (string value)
-#vmware_store_image_dir = /openstack_glance
-
-# If true, the ESX/vCenter server certificate is not verified. If
-# false, then the default CA truststore is used for verification. This
-# option is ignored if "vmware_ca_file" is set. (boolean value)
-# Deprecated group/name - [DEFAULT]/vmware_api_insecure
-#vmware_insecure = false
-
-# Specify a CA bundle file to use in verifying the ESX/vCenter server
-# certificate. (string value)
-#vmware_ca_file = <None>
-
-# A list of datastores where the image can be stored. This option may
-# be specified multiple times for specifying multiple datastores. The
-# datastore name should be specified after its datacenter path,
-# seperated by ":". An optional weight may be given after the
-# datastore name, seperated again by ":". Thus, the required format
-# becomes <datacenter_path>:<datastore_name>:<optional_weight>. When
-# adding an image, the datastore with highest weight will be selected,
-# unless there is not enough free space available in cases where the
-# image size is already known. If no weight is given, it is assumed to
-# be zero and the directory will be considered for selection last. If
-# multiple datastores have the same weight, then the one with the most
-# free space available is selected. (multi valued)
-#vmware_datastores =
 
 # Directory to which the Filesystem backend store writes images.
 # (string value)
@@ -1090,6 +1073,23 @@
 # permission of the file. This value will be decoded as an octal
 # digit. (integer value)
 #filesystem_store_file_perm = 0
+
+# Specify the path to the CA bundle file to use in verifying the
+# remote server certificate. (string value)
+#https_ca_certificates_file = <None>
+
+# If true, the remote server certificate is not verified. If false,
+# then the default CA truststore is used for verification. This option
+# is ignored if "https_ca_certificates_file" is set. (boolean value)
+#https_insecure = true
+
+# Specify the http/https proxy information that should be used to
+# connect to the remote server. The proxy information should be a key
+# value pair of the scheme and proxy. e.g. http:10.0.0.1:3128. You can
+# specify proxies for multiple schemes by seperating the key value
+# pairs with a comma.e.g. http:10.0.0.1:3128, https:10.0.0.1:1080.
+# (dict value)
+#http_proxy_information =
 
 
 [image_format]
