@@ -1,32 +1,23 @@
 source 'https://rubygems.org'
 
-group :development, :test do
-  gem 'puppetlabs_spec_helper', '~> 1.1.0', :require => false
-  gem 'rspec-puppet', '~> 2.1.0', :require => false
+gem 'puppetlabs_spec_helper', :require => false
+gem 'rspec-puppet', '~> 2.3.0', :require => false
 
-  gem 'metadata-json-lint'
-  gem 'puppet-lint-param-docs'
-  gem 'puppet-lint-absolute_classname-check'
-  gem 'puppet-lint-absolute_template_path'
-  gem 'puppet-lint-trailing_newline-check'
+gem 'puppet-lint-absolute_classname-check'
+gem 'puppet-lint-absolute_template_path'
+gem 'puppet-lint-trailing_newline-check'
 
-  # Puppet 4.x related lint checks
-  gem 'puppet-lint-unquoted_string-check'
-  gem 'puppet-lint-leading_zero-check'
-  gem 'puppet-lint-variable_contains_upcase'
-  gem 'puppet-lint-numericvariable'
+gem 'puppet-lint-variable_contains_upcase'
+gem 'puppet-lint-leading_zero-check'
+gem 'puppet-lint-numericvariable'
+gem 'puppet-lint-unquoted_string-check'
 
-  gem 'json_pure', '< 2.0.0', :require => false
-
-  gem 'beaker-rspec', :require => false
-  gem 'json'
-  gem 'webmock'
-end
+gem 'json_pure', '< 2.0.2', :require => false
 
 if puppetversion = ENV['PUPPET_GEM_VERSION']
-  gem 'puppet', puppetversion, :require => false
+          gem 'puppet', puppetversion, :require => false
 else
-  gem 'puppet', :require => false
+          gem 'puppet', :require => false
 end
 
 # vim:ft=ruby
