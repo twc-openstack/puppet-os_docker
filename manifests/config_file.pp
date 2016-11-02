@@ -1,4 +1,4 @@
-# == Define: designate::config_file
+# == Define: os_docker::config_file
 #
 # Manage permissions for configuration files, and optionally create them if
 # needed.  It also has the ability to automatically create symlinks to the
