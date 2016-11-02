@@ -4,11 +4,10 @@
 
 BASEDIR=$(cd "$(dirname "$0")"; pwd)
 PROJECTS="tesora-trove"
-RELEASES="EE-1.7 EE-1.8"
+RELEASES="EE-1.9"
 declare -A BRANCHES
 BRANCHES=(
-  ["EE-1.7"]="dev/EE-1.7"  # liberty
-  ["EE-1.8"]="dev/EE-1.8"  # mitaka
+  ["EE-1-9"]="EE-1.9"  # newton
 )
 
 . $BASEDIR/tox-venv/bin/activate
@@ -17,7 +16,7 @@ mkdir -p $BASEDIR/configs
 for PROJECT in $PROJECTS; do
   cd $BASEDIR
   rm -rf $BASEDIR/git-tmp
-  git clone https://github.com/Tesora/$PROJECT $BASEDIR/git-tmp
+  git clone https://github.com/Tesora-Release/$PROJECT $BASEDIR/git-tmp
   for RELEASE in $RELEASES; do
     cd $BASEDIR/git-tmp
     git clean -f -x -d
