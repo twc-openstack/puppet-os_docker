@@ -4,11 +4,10 @@
 
 BASEDIR=$(cd "$(dirname "$0")"; pwd)
 PROJECTS="tesora-trove"
-RELEASES="EE-1.7 EE-1.8"
+RELEASES="EE-1.9"
 declare -A BRANCHES
 BRANCHES=(
-  ["EE-1.7"]="dev/EE-1.7"  # liberty
-  ["EE-1.8"]="dev/EE-1.8"  # mitaka
+  ["EE-1-9"]="dev/EE-1.9"  # newton
 )
 
 . $BASEDIR/tox-venv/bin/activate
