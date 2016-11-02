@@ -23,18 +23,22 @@
 # files are associated with.  This is used to set the base directory
 # (/etc/<project_name>) and the owner of all of the configuration files.
 #
+# [*config_dir*] (optional) Used to override the standard path for source
+# files. If unset $project_name will be used.
+#
 define os_docker::config_files(
   $release_name,
   $config_files,
   $image_name,
   $image_tag,
   $project_name = $title,
+  $config_dir = $project_name,
 ) {
   $config_file_defaults = {
     config_dir => "/etc/${project_name}",
     owner      => $project_name,
     group      => $project_name,
-    source_dir => "puppet:///modules/os_docker/${project_name}/config/${release_name}",
+    source_dir => "puppet:///modules/os_docker/${config_dir}/config/${release_name}",
     tag        => "os_docker-${project_name}-config-file",
   }
   create_resources(::os_docker::config_file, $config_files, $config_file_defaults)
