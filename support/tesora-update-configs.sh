@@ -29,6 +29,6 @@ for PROJECT in $PROJECTS; do
 
     rsync -avP --delete --exclude 'README*.txt' --exclude 'tests' \
       --delete-excluded \
-      $CONFDIR $BASEDIR/configs/$PROJECT/config/$RELEASE/
+      $CONFDIR/tesora/* $BASEDIR/configs/$PROJECT/config/$RELEASE/
   done
 done
