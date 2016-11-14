@@ -125,7 +125,7 @@ class os_docker::nova::compute(
         content => '',
         require => [
           Package['ceph'],
-          Package['libvirt-bin'],
+          Package['libvirt'],
         ],
       }
     }
