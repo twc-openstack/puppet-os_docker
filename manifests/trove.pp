@@ -43,11 +43,12 @@ class os_docker::trove(
 ) inherits os_docker::trove::params {
 
   file { $::os_docker::trove::params::managed_dirs:
-    ensure => directory,
-    owner  => 'trove',
-    group  => 'trove',
-    mode   => '0750',
-    before => Anchor['trove::install::begin'],
+    ensure  => directory,
+    owner   => 'trove',
+    group   => 'trove',
+    mode    => '0750',
+    before  => Anchor['trove::dbsync::begin'],
+    require => Anchor['trove::install::end'],
   }
   $active_image = { "${active_image_name}:${active_image_tag}" => {
     image     => $active_image_name,
