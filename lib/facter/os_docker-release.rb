@@ -1,4 +1,4 @@
-['cinder', 'designate', 'glance', 'heat', 'neutron', 'nova', 'keystone', 'ironic', 'swift']. each do |project|
+['cinder', 'designate', 'glance', 'heat', 'neutron', 'nova', 'keystone', 'ironic', 'swift', 'trove', 'manila']. each do |project|
   if File.readable?("/etc/#{project}/release_name")
     Facter.add("#{project}_release") do
       setcode do
