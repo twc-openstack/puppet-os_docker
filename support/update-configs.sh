@@ -43,6 +43,13 @@ for PROJECT in $PROJECTS; do
         perl -i -pe 's!.*oslo-config-generator.*glance-search.conf.*$!!' tox.ini
         tox -r -e genconfig
       fi
+
+      if [ -f $EXCEPTIONDIR/${PROJECT}-${RELEASE}.precopy ]; then
+        . $EXCEPTIONDIR/${PROJECT}-${RELEASE}.precopy
+      elif [ -f $EXCEPTIONDIR/${PROJECT}.precopy ]; then
+        . $EXCEPTIONDIR/${PROJECT}.precopy
+      fi
+
       mkdir -p $BASEDIR/configs/$PROJECT/config/$RELEASE
       if [ -d etc/$PROJECT ]; then
         CONFDIR=etc/$PROJECT/
