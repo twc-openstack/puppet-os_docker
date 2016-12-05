@@ -1,0 +1,2 @@
+mv etc/mistral/* etc
+rm -rf etc/mistral
