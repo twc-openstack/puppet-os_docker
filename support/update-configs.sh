@@ -12,7 +12,8 @@ BRANCHES=(
   ["kilo"]="kilo-eol"
   ["liberty"]="stable/liberty"
   ["mitaka"]="stable/mitaka"
-  ["newton"]="master"
+  ["newton"]="stable/newton"
+  ["ocata"]="master"
 )
 
 . $BASEDIR/tox-venv/bin/activate
