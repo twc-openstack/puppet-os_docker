@@ -130,15 +130,6 @@
 # Allowed values: CFN_SIGNAL, TEMP_URL_SIGNAL, HEAT_SIGNAL, ZAQAR_SIGNAL
 #default_deployment_signal_transport = CFN_SIGNAL
 
-# Template default for how the user_data should be formatted for the server.
-# For HEAT_CFNTOOLS, the user_data is bundled as part of the heat-cfntools
-# cloud-init boot configuration data. For RAW the user_data is passed to Nova
-# unmodified. For SOFTWARE_CONFIG user_data is bundled as part of the software
-# config data, and metadata is derived from any associated SoftwareDeployment
-# resources. (string value)
-# Allowed values: HEAT_CFNTOOLS, RAW, SOFTWARE_CONFIG
-#default_user_data_format = HEAT_CFNTOOLS
-
 # Stacks containing these tag names will be hidden. Multiple tags should be
 # given in a comma-delimited list (eg. hidden_stack_tags=hide_me,me_too). (list
 # value)
@@ -244,7 +235,7 @@
 # From heat.engine.notification
 #
 
-# Default notification level for outgoingnotifications. (string value)
+# Default notification level for outgoing notifications. (string value)
 #default_notification_level = INFO
 
 # Default publisher_id for outgoing notifications. (string value)
@@ -374,7 +365,7 @@
 #rpc_zmq_bind_address = *
 
 # MatchMaker driver. (string value)
-# Allowed values: redis, sentinel, dummy
+# Allowed values: redis, dummy
 # Deprecated group/name - [DEFAULT]/rpc_zmq_matchmaker
 #rpc_zmq_matchmaker = redis
 
@@ -396,13 +387,12 @@
 # Deprecated group/name - [DEFAULT]/rpc_zmq_host
 #rpc_zmq_host = localhost
 
-# Number of seconds to wait before all pending messages will be sent after
-# closing a socket. The default value of -1 specifies an infinite linger
-# period. The value of 0 specifies no linger period. Pending messages shall be
-# discarded immediately when the socket is closed. Positive values specify an
-# upper bound for the linger period. (integer value)
+# Seconds to wait before a cast expires (TTL). The default value of -1
+# specifies an infinite linger period. The value of 0 specifies no linger
+# period. Pending messages shall be discarded immediately when the socket is
+# closed. Only supported by impl_zmq. (integer value)
 # Deprecated group/name - [DEFAULT]/rpc_cast_timeout
-#zmq_linger = -1
+#rpc_cast_timeout = -1
 
 # The default number of seconds that poll should wait. Poll raises timeout
 # exception when timeout expired. (integer value)
@@ -455,58 +445,7 @@
 # a queue when server side disconnects. False means to keep queue and messages
 # even if server is disconnected, when the server appears we send all
 # accumulated messages to it. (boolean value)
-#zmq_immediate = true
-
-# Enable/disable TCP keepalive (KA) mechanism. The default value of -1 (or any
-# other negative value) means to skip any overrides and leave it to OS default;
-# 0 and 1 (or any other positive value) mean to disable and enable the option
-# respectively. (integer value)
-#zmq_tcp_keepalive = -1
-
-# The duration between two keepalive transmissions in idle condition. The unit
-# is platform dependent, for example, seconds in Linux, milliseconds in Windows
-# etc. The default value of -1 (or any other negative value and 0) means to
-# skip any overrides and leave it to OS default. (integer value)
-#zmq_tcp_keepalive_idle = -1
-
-# The number of retransmissions to be carried out before declaring that remote
-# end is not available. The default value of -1 (or any other negative value
-# and 0) means to skip any overrides and leave it to OS default. (integer
-# value)
-#zmq_tcp_keepalive_cnt = -1
-
-# The duration between two successive keepalive retransmissions, if
-# acknowledgement to the previous keepalive transmission is not received. The
-# unit is platform dependent, for example, seconds in Linux, milliseconds in
-# Windows etc. The default value of -1 (or any other negative value and 0)
-# means to skip any overrides and leave it to OS default. (integer value)
-#zmq_tcp_keepalive_intvl = -1
-
-# Maximum number of (green) threads to work concurrently. (integer value)
-#rpc_thread_pool_size = 100
-
-# Expiration timeout in seconds of a sent/received message after which it is
-# not tracked anymore by a client/server. (integer value)
-#rpc_message_ttl = 300
-
-# Wait for message acknowledgements from receivers. This mechanism works only
-# via proxy without PUB/SUB. (boolean value)
-#rpc_use_acks = true
-
-# Number of seconds to wait for an ack from a cast/call. After each retry
-# attempt this timeout is multiplied by some specified multiplier. (integer
-# value)
-#rpc_ack_timeout_base = 15
-
-# Number to multiply base ack timeout by after each retry attempt. (integer
-# value)
-#rpc_ack_timeout_multiplier = 2
-
-# Default number of message sending attempts in case of any problems occurred:
-# positive value N means at most N retries, 0 means no retries, None or -1 (or
-# any other negative values) mean to retry forever. This option is used only if
-# acknowledgments are enabled. (integer value)
-#rpc_retry_attempts = 3
+#zmq_immediate = false
 
 # Size of executor thread pool. (integer value)
 # Deprecated group/name - [DEFAULT]/rpc_thread_pool_size
@@ -1292,7 +1231,6 @@
 
 # Number of workers for Heat service. Default value 0 means, that service will
 # start number of workers equal number of cores on server. (integer value)
-# Minimum value: 0
 # Deprecated group/name - [DEFAULT]/workers
 #workers = 0
 
@@ -1337,7 +1275,6 @@
 #key_file = <None>
 
 # Number of workers for Heat service. (integer value)
-# Minimum value: 0
 # Deprecated group/name - [DEFAULT]/workers
 #workers = 1
 
@@ -1382,7 +1319,6 @@
 #key_file = <None>
 
 # Number of workers for Heat service. (integer value)
-# Minimum value: 0
 # Deprecated group/name - [DEFAULT]/workers
 #workers = 1
 
@@ -1748,19 +1684,6 @@
 # Minimum value: 1
 #notify_server_credit = 100
 
-# Send messages of this type pre-settled.
-# Pre-settled messages will not receive acknowledgement
-# from the peer. Note well: pre-settled messages may be
-# silently discarded if the delivery fails.
-# Permitted values:
-# 'rpc-call' - send RPC Calls pre-settled
-# 'rpc-reply'- send RPC Replies pre-settled
-# 'rpc-cast' - Send RPC Casts pre-settled
-# 'notify'   - Send Notifications pre-settled
-#  (multi valued)
-#pre_settled = rpc-cast
-#pre_settled = rpc-reply
-
 
 [oslo_messaging_notifications]
 
@@ -1881,7 +1804,6 @@
 #rabbit_password = guest
 
 # The RabbitMQ login method. (string value)
-# Allowed values: PLAIN, AMQPLAIN, RABBIT-CR-DEMO
 # Deprecated group/name - [DEFAULT]/rabbit_login_method
 #rabbit_login_method = AMQPLAIN
 
@@ -1914,7 +1836,7 @@
 # Try to use HA queues in RabbitMQ (x-ha-policy: all). If you change this
 # option, you must wipe the RabbitMQ database. In RabbitMQ 3.0, queue mirroring
 # is no longer controlled by the x-ha-policy argument when declaring a queue.
-# If you just want to make sure that all queues (except those with auto-
+# If you just want to make sure that all queues (except  those with auto-
 # generated names) are mirrored across all nodes, run: "rabbitmqctl set_policy
 # HA '^(?!amq\.).*' '{"ha-mode": "all"}' " (boolean value)
 # Deprecated group/name - [DEFAULT]/rabbit_ha_queues
@@ -1993,11 +1915,6 @@
 # (integer value)
 #pool_stale = 60
 
-# Default serialization mechanism for serializing/deserializing
-# outgoing/incoming messages (string value)
-# Allowed values: json, msgpack
-#default_serializer_type = json
-
 # Persist notification messages. (boolean value)
 #notification_persistence = false
 
@@ -2063,7 +1980,7 @@
 #rpc_zmq_bind_address = *
 
 # MatchMaker driver. (string value)
-# Allowed values: redis, sentinel, dummy
+# Allowed values: redis, dummy
 # Deprecated group/name - [DEFAULT]/rpc_zmq_matchmaker
 #rpc_zmq_matchmaker = redis
 
@@ -2085,13 +2002,12 @@
 # Deprecated group/name - [DEFAULT]/rpc_zmq_host
 #rpc_zmq_host = localhost
 
-# Number of seconds to wait before all pending messages will be sent after
-# closing a socket. The default value of -1 specifies an infinite linger
-# period. The value of 0 specifies no linger period. Pending messages shall be
-# discarded immediately when the socket is closed. Positive values specify an
-# upper bound for the linger period. (integer value)
+# Seconds to wait before a cast expires (TTL). The default value of -1
+# specifies an infinite linger period. The value of 0 specifies no linger
+# period. Pending messages shall be discarded immediately when the socket is
+# closed. Only supported by impl_zmq. (integer value)
 # Deprecated group/name - [DEFAULT]/rpc_cast_timeout
-#zmq_linger = -1
+#rpc_cast_timeout = -1
 
 # The default number of seconds that poll should wait. Poll raises timeout
 # exception when timeout expired. (integer value)
@@ -2144,58 +2060,7 @@
 # a queue when server side disconnects. False means to keep queue and messages
 # even if server is disconnected, when the server appears we send all
 # accumulated messages to it. (boolean value)
-#zmq_immediate = true
-
-# Enable/disable TCP keepalive (KA) mechanism. The default value of -1 (or any
-# other negative value) means to skip any overrides and leave it to OS default;
-# 0 and 1 (or any other positive value) mean to disable and enable the option
-# respectively. (integer value)
-#zmq_tcp_keepalive = -1
-
-# The duration between two keepalive transmissions in idle condition. The unit
-# is platform dependent, for example, seconds in Linux, milliseconds in Windows
-# etc. The default value of -1 (or any other negative value and 0) means to
-# skip any overrides and leave it to OS default. (integer value)
-#zmq_tcp_keepalive_idle = -1
-
-# The number of retransmissions to be carried out before declaring that remote
-# end is not available. The default value of -1 (or any other negative value
-# and 0) means to skip any overrides and leave it to OS default. (integer
-# value)
-#zmq_tcp_keepalive_cnt = -1
-
-# The duration between two successive keepalive retransmissions, if
-# acknowledgement to the previous keepalive transmission is not received. The
-# unit is platform dependent, for example, seconds in Linux, milliseconds in
-# Windows etc. The default value of -1 (or any other negative value and 0)
-# means to skip any overrides and leave it to OS default. (integer value)
-#zmq_tcp_keepalive_intvl = -1
-
-# Maximum number of (green) threads to work concurrently. (integer value)
-#rpc_thread_pool_size = 100
-
-# Expiration timeout in seconds of a sent/received message after which it is
-# not tracked anymore by a client/server. (integer value)
-#rpc_message_ttl = 300
-
-# Wait for message acknowledgements from receivers. This mechanism works only
-# via proxy without PUB/SUB. (boolean value)
-#rpc_use_acks = true
-
-# Number of seconds to wait for an ack from a cast/call. After each retry
-# attempt this timeout is multiplied by some specified multiplier. (integer
-# value)
-#rpc_ack_timeout_base = 15
-
-# Number to multiply base ack timeout by after each retry attempt. (integer
-# value)
-#rpc_ack_timeout_multiplier = 2
-
-# Default number of message sending attempts in case of any problems occurred:
-# positive value N means at most N retries, 0 means no retries, None or -1 (or
-# any other negative values) mean to retry forever. This option is used only if
-# acknowledgments are enabled. (integer value)
-#rpc_retry_attempts = 3
+#zmq_immediate = false
 
 
 [oslo_middleware]
@@ -2227,7 +2092,7 @@
 # From oslo.policy
 #
 
-# The file that defines policies. (string value)
+# The JSON file that defines policies. (string value)
 # Deprecated group/name - [DEFAULT]/policy_file
 #policy_file = policy.json
 
