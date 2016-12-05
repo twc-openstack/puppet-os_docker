@@ -16,7 +16,8 @@ apt-get install --no-install-recommends -y \
   pkg-config \
   python-dev \
   python-virtualenv \
-  rsync
+  rsync \
+  curl
 
 RUN virtualenv /tox-venv
 RUN /tox-venv/bin/pip install -U pip

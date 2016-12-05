@@ -1,0 +1,7 @@
+curl -k https://raw.githubusercontent.com/openstack/requirements/stable/${RELEASE}/upper-constraints.txt\
+  | grep -v mistral > /tmp/upper-constraints.txt
+
+mkdir -p etc/mistral
+pip install -c /tmp/upper-constraints.txt -r /git-tmp/requirements.txt
+oslo-config-generator --config-file tools/config/config-generator.mistral.conf\
+  --output-file etc/mistral/mistral.conf.sample
