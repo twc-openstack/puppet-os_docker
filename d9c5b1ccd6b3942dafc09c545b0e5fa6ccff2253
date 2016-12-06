@@ -1,0 +1,9 @@
+Code-Review+1: Franciraldo Cavalcante <C-Franciraldo.Cavalcante@charter.com>
+Workflow+1: Franciraldo Cavalcante <C-Franciraldo.Cavalcante@charter.com>
+Verified+1: Jenkins User <jenkins@twcable.com>
+Code-Review+2: Adam Vinsh <adam.vinsh@charter.com>
+Submitted-by: Jenkins User <jenkins@twcable.com>
+Submitted-at: Tue, 06 Dec 2016 16:05:57 +0000
+Reviewed-on: https://bfd-gerrit.os.cloud.twc.net/13911
+Project: puppet-os_docker
+Branch: refs/heads/master
