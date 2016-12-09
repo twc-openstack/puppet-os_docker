@@ -3,9 +3,7 @@
 # This class handles any docker related changes needed for this service.
 # Currently this includes creating the docker container and the startup script
 # to go with it.  The ironic_compute service is intended to be nova-compute
-# running the ironic.IronicDriver. This container will expect an extra conf
-# file in place called "/etc/nova/nova-ironic.conf" which contains the ironic
-# specific nova-compute overrides.
+# running the ironic.IronicDriver.
 #
 # === Parameters
 #
@@ -55,7 +53,6 @@ class os_docker::nova::ironic_compute(
   $command = join([
     '/usr/bin/nova-compute',
     '--config-file /etc/nova/nova.conf',
-    '--config-file /etc/nova/nova-ironic.conf',
   ], ' ')
 
   if $active_image_name {
