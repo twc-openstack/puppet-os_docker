@@ -3,10 +3,8 @@
 BASEDIR=$(cd "$(dirname "$0")"; pwd)
 EXCEPTIONDIR=$BASEDIR/exceptions
 
-PROJECTS="mistral"
-RELEASES="newton"
-#PROJECTS="designate glance heat keystone mistral nova neutron cinder ironic swift"
-#RELEASES="juno kilo liberty mitaka newton"
+PROJECTS="designate glance heat keystone mistral nova neutron cinder ironic swift"
+RELEASES="juno kilo liberty mitaka newton"
 
 declare -A BRANCHES
 BRANCHES=(
