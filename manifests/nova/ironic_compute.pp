@@ -55,7 +55,6 @@ class os_docker::nova::ironic_compute(
   $command = join([
     '/usr/bin/nova-compute',
     '--config-file /etc/nova/nova.conf',
-    '--config-file /etc/nova/nova-ironic.conf',
   ], ' ')
 
   if $active_image_name {
