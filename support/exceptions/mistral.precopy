@@ -1,2 +1,8 @@
+# mistral has files called x.sample.rotating
+# rename to x.rotating.sample to simplify puppet logic later
+for i in $(find $CONFDIR -name '*.sample.rotating'); do
+  mv $i $(dirname $i)/$(basename $i .sample.rotating).rotating.sample
+done
+
 mv etc/mistral/* etc
 rm -rf etc/mistral
