@@ -61,7 +61,10 @@ define os_docker::config_file(
   $ensure     = file,
   $replace    = false,
 ) {
-  if $path =~ /^\// {
+ if $path =~ /^puppet:\/\// {
+    $file = $name
+    $path_real = $name
+  } elsif $path =~ /^\// {
     $file = regsubst($path, "^${config_dir}/", '')
     $path_real = $path
   } else {
@@ -69,7 +72,9 @@ define os_docker::config_file(
     $path_real = "${config_dir}/${path}"
   }
 
-  if $source_dir {
+  if $path =~ /^puppet:\/\// {
+    $source = $path
+  } elsif $source_dir {
     $source = ["${source_dir}/${file}", "${source_dir}/${file}.sample"]
   }
 
