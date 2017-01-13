@@ -48,7 +48,7 @@ class os_docker::cinder(
   $active_image_overrides = {},
   $extra_images           = {},
   $config_files           = $::os_docker::cinder::params::config_files,
-  $groups                 = ['ceph'],
+  $groups                 = [],
 
   $before_start           = '',
   $enable_iscsi           = false,
