@@ -40,7 +40,7 @@ class os_docker::glance(
   $active_image_overrides = {},
   $extra_images           = {},
   $config_files           = $::os_docker::glance::params::config_files,
-  $groups                 = [],
+  $groups                 = ['ceph'],
 ) inherits os_docker::glance::params {
 
   $environment = [
