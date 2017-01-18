@@ -11,6 +11,9 @@ docker="/usr/bin/<%= @docker_command %>"
 
 [ -x $docker ] || exit 5
 
+mkdir -p /var/run/swift
+chown -R swift:swift /var/run/swift
+
 <% if @pull_on_start -%>
     $docker pull <%= @image %>
 <% end -%>
@@ -25,6 +28,7 @@ if [ "$2" == "status" ]; then
 else
 # Run swift-init then detach from container.  swift-init monitors
 # and runs the swift services in the same container.
+  $docker rm -f swift-$1-$2 >/dev/null 2>&1
   ID=$(exec $docker run \
   -d <%= @docker_run_flags %> \
   <%= @image %> \
