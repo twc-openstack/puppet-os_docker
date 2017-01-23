@@ -40,7 +40,7 @@ class os_docker::nova::compute(
   $run_override      = {},
   $active_image_name = $::os_docker::nova::active_image_name,
   $active_image_tag  = $::os_docker::nova::active_image_tag,
-  $groups            = ['libvirtd', 'ceph'],
+  $groups            = ['libvirtd'],
   $extra_volumes     = [],
   $before_start      = '',
   $enable_nfs        = false,
