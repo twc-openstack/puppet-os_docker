@@ -1,0 +1,9 @@
+Verified+1: Jenkins User <jenkins@twcable.com>
+Code-Review+1: Al Straub <albert.straub@charter.com>
+Workflow+1: Al Straub <albert.straub@charter.com>
+Code-Review+2: Matt Fischer <matt.fischer@charter.com>
+Submitted-by: Jenkins User <jenkins@twcable.com>
+Submitted-at: Wed, 25 Jan 2017 20:36:52 +0000
+Reviewed-on: https://bfd-gerrit.os.cloud.twc.net/14531
+Project: puppet-os_docker
+Branch: refs/heads/master
