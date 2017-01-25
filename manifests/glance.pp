@@ -30,9 +30,6 @@
 # os_docker::config_file defined type.  Filenames should be relative to
 # /etc/glance. Default: $::os_docker::glance::params::config_files
 #
-# [*groups*] (optional) Groups that the glance user inside the container should
-# be a member of.
-#
 class os_docker::glance(
   $release_name,
   $active_image_name,
@@ -40,38 +37,11 @@ class os_docker::glance(
   $active_image_overrides = {},
   $extra_images           = {},
   $config_files           = $::os_docker::glance::params::config_files,
-  $groups                 = ['ceph'],
 ) inherits os_docker::glance::params {
 
   $environment = [
-    'OS_DOCKER_GROUP_DIR=/etc/glance/groups',
     'OS_DOCKER_HOME_DIR=/var/lib/glance',
   ]
-
-  # This directory exists to hold files the glance user needs to be able to
-  # read.  The container is expected to ensure the glance user inside the
-  # container is a member of the groups that own the files in the directory.
-  file { '/etc/glance/groups':
-    ensure  => 'directory',
-    owner   => 'glance',
-    group   => 'glance',
-    mode    => '0755',
-    purge   => true,
-    recurse => true,
-    force   => true,
-  }
-
-  $groups.each |$group| {
-    file { "/etc/glance/groups/$group":
-      ensure  => 'file',
-      owner   => 'glance',
-      group   => $group,
-      content => '',
-      require => [
-        Package['ceph'],
-      ],
-    }
-  }
 
   file { $::os_docker::glance::params::managed_dirs:
     ensure => directory,
