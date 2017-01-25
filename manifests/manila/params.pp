@@ -16,7 +16,7 @@ class os_docker::manila::params {
   # config files if they've changed, and leave users the option to override via
   # parameters into the os_docker::manila class.
   $config_files  = {
-    '/etc/manila/manila.conf'              => { replace => true },
+    '/etc/manila/manila.conf'              => { replace => false },
     '/etc/manila/api-paste.ini'            => { replace => false },
     '/etc/manila/policy.json'              => { replace => true },
     '/etc/manila/logging.conf'             => { replace => true },
