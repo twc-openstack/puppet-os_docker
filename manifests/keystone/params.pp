@@ -1,10 +1,21 @@
 class os_docker::keystone::params {
   include ::keystone::params
 
-  $managed_dirs = [
+  $default_managed_dirs = [
     '/var/log/keystone',
     '/etc/keystone',
   ]
+
+  if $::os_docker::keystone::enable_ssl {
+    $ssl_managed_dirs = [
+      '/etc/keystone/ssl',
+      '/etc/keystone/ssl/certs',
+      '/etc/keystone/ssl/private',
+    ]
+    $managed_dirs = concat($default_managed_dirs, $ssl_managed_dirs)
+  } else {
+    $managed_dirs = $default_managed_dirs
+  }
 
   # By default with packages the file contents aren't managed, so the setting
   # for replace doesn't matter.  However with docker, the files from the
@@ -21,7 +32,7 @@ class os_docker::keystone::params {
     '/etc/keystone/sso_callback_template.html' => { replace => true },
   }
 
-  $volumes = [
+  $default_volumes = [
     '/etc/keystone:/etc/keystone:ro',
     # Keystone has a bug that requires it to have write access to the
     # fernet directory even though it will never write to it.
@@ -30,4 +41,16 @@ class os_docker::keystone::params {
     # Keystone needs the certs mounted in order to use LDAPS
     '/etc/ssl/certs:/etc/ssl/certs:ro',
   ]
+
+  if $::os_docker::keystone::enable_ssl {
+    $ssl_volumes = [
+      # Keystone needs certs mounted to start SSL endpoint(s)
+      '/etc/keystone/ssl:/etc/keystone/ssl:ro',
+      '/etc/keystone/ssl/certs:/etc/keystone/ssl/certs:ro',
+      '/etc/keystone/ssl/private:/etc/keystone/ssl/private:ro',
+    ]
+    $volumes = concat($default_volumes, $ssl_volumes)
+  } else {
+    $volumes = $default_volumes
+  }
 }

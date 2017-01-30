@@ -30,6 +30,9 @@
 # os_docker::config_file defined type.  Filenames should be relative to
 # /etc/keystone. Default: $::os_docker::keystone::params::config_files
 #
+# [*enable_ssl*] (optional) Enable SSL for keystone docker image. Default: false
+#
+
 class os_docker::keystone(
   $release_name,
   $active_image_name,
@@ -37,6 +40,7 @@ class os_docker::keystone(
   $active_image_overrides = {},
   $extra_images           = {},
   $config_files           = $::os_docker::keystone::params::config_files,
+  $enable_ssl             = $::keystone::enable_ssl,
 ) inherits os_docker::keystone::params {
 
   file { $::os_docker::keystone::params::managed_dirs:
@@ -47,6 +51,13 @@ class os_docker::keystone(
     before  => Anchor['keystone::install::begin'],
     require => [User['keystone'], Group['keystone']]
   }
+
+  if $enable_ssl {
+    class{ '::os_docker::keystone::ssl':
+      before  => Anchor['keystone::install::begin'],
+    }
+  }
+
   $active_image = { "${active_image_name}:${active_image_tag}" => {
     image     => $active_image_name,
     image_tag => $active_image_tag,
