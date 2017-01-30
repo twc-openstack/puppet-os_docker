@@ -29,5 +29,7 @@ class os_docker::keystone::params {
     '/var/log/keystone:/var/log/keystone',
     # Keystone needs the certs mounted in order to use LDAPS
     '/etc/ssl/certs:/etc/ssl/certs:ro',
+    # Keystone needs certs mounted to start SSL endpoint(s)
+    '/etc/keystone/ssl:/etc/keystone/ssl:ro',
   ]
 }
